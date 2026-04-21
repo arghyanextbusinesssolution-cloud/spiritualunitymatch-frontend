@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 interface SidebarNavigationProps {
     userProfilePhoto?: string | null;
@@ -13,6 +14,7 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
     const router = useRouter();
     const { user } = useAuth();
     const { showUpgradeModal, hideUpgradeModal } = useSubscription();
+    const { startLoading } = useLoading();
     const isBasic = user?.role === 'basic';
 
     const navItems = [
@@ -94,6 +96,7 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
                 <nav className="flex-1 space-y-1">
                     {navItems.map((item) => {
                         const active = isActive(item);
+                        // Basic users are restricted from the "Messages" and "Likes" (seeing who liked them)
                         const isRestricted = (item.label === 'Messages' || item.label === 'Likes') && isBasic;
 
                         const handleClick = (e: React.MouseEvent) => {
@@ -118,6 +121,7 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
                                             console.log(`[Sidebar] Navigating to unrestricted route: ${item.href}`);
                                         }
                                         hideUpgradeModal();
+                                        startLoading();
                                         router.push(item.href);
                                     }
                                 }}

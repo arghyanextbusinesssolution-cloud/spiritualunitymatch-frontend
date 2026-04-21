@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 import { useSubscription } from '@/contexts/SubscriptionContext';
@@ -96,12 +96,12 @@ export default function UserProfilePage() {
             <div className="text-6xl mb-4">💜</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Profile Not Found</h2>
             <p className="text-gray-600 mb-6">This profile could not be found.</p>
-            <Link
+            <LoadingLink
               href="/matches/suggested"
               className="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold"
             >
               Back to Matches
-            </Link>
+            </LoadingLink>
           </div>
         </div>
       </div>
@@ -152,8 +152,13 @@ export default function UserProfilePage() {
 
             {/* Profile Info */}
             <div className="p-6">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
                 <h1 className="text-3xl font-bold text-gray-800">{profile.name}</h1>
+                {profile.isPremium && (
+                  <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
+                    <span className="text-[12px]">👑</span> PREMIUM
+                  </span>
+                )}
                 {profile.isApproved && (
                   <motion.div
                     initial={{ scale: 0 }}
@@ -176,6 +181,11 @@ export default function UserProfilePage() {
               {profile.nickname && <p className="text-gray-600 mb-4">@{profile.nickname}</p>}
               {profile.age && (
                 <p className="text-gray-600 mb-4">{profile.age} years old</p>
+              )}
+              {profile.location && (
+                <p className="text-gray-600 mb-4 flex items-center gap-1">
+                  <span className="text-xl">📍</span> {profile.location.city}, {profile.location.country}
+                </p>
               )}
 
               {profile.bio && (

@@ -1,12 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLoading } from '@/contexts/LoadingContext';
 import { Loader } from '@/components/Loader';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 import { MaskContainer } from '@/components/ui/svg-mask-effect';
 import { AnimatedTestimonials } from '@/components/ui/animated-testimonials';
 import DefaultNavbar from '@/components/DefaultNavbar';
@@ -450,6 +452,7 @@ const ImageSlider = () => {
 
 export default function HomePage() {
   const { user, loading } = useAuth();
+  const { startLoading } = useLoading();
   const router = useRouter();
 
   // Modal state
@@ -538,6 +541,7 @@ export default function HomePage() {
               >
                 <Link
                   href="/auth/register"
+                  onClick={() => startLoading()}
                   className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                 >
                   Start Your Journey Free
@@ -557,7 +561,11 @@ export default function HomePage() {
                 className="text-gray-500"
               >
                 Already have an account?{' '}
-                <Link href="/auth/login" className="text-purple-600 font-semibold hover:underline">
+                <Link 
+                  href="/auth/login" 
+                  onClick={() => startLoading()}
+                  className="text-purple-600 font-semibold hover:underline"
+                >
                   Sign In
                 </Link>
               </motion.p>
@@ -923,7 +931,7 @@ export default function HomePage() {
                   ))}
                 </ul>
 
-                <Link
+                <LoadingLink
                   href="/plans"
                   className={`w-full py-3 px-6 rounded-full font-semibold text-center transition-all duration-200 block ${plan.popular
                     ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:shadow-xl hover:scale-105'
@@ -931,7 +939,7 @@ export default function HomePage() {
                     }`}
                 >
                   Choose Plan
-                </Link>
+                </LoadingLink>
               </motion.div>
             ))}
           </div>
@@ -943,7 +951,7 @@ export default function HomePage() {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-center mt-12"
           >
-            <Link
+            <LoadingLink
               href="/plans"
               className="inline-flex items-center text-purple-600 font-semibold hover:text-purple-800 transition-colors"
             >
@@ -951,7 +959,7 @@ export default function HomePage() {
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </LoadingLink>
           </motion.div>
         </div>
       </section>
@@ -1023,18 +1031,18 @@ export default function HomePage() {
               Join thousands of conscious souls seeking meaningful connections in a world of superficial swipes
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Link
+              <LoadingLink
                 href="/auth/register"
                 className="w-full sm:w-auto bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 shadow-xl"
               >
                 Start Your Journey Free
-              </Link>
-              <Link
+              </LoadingLink>
+              <LoadingLink
                 href="/auth/login"
                 className="w-full sm:w-auto border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-purple-600 transition-all duration-200"
               >
                 Sign In
-              </Link>
+              </LoadingLink>
             </div>
             <p className="text-sm opacity-75">
               ✨ No credit card required • 100% free to get started
@@ -1079,11 +1087,11 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-3">
-                <li><Link href="/auth/login" className="text-gray-400 hover:text-white transition-colors">Sign In</Link></li>
-                <li><Link href="/auth/register" className="text-gray-400 hover:text-white transition-colors">Get Started</Link></li>
-                <li><Link href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</Link></li>
-                <li><Link href="/plans" className="text-gray-400 hover:text-white transition-colors">Plans & Pricing</Link></li>
-                <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+                <li><LoadingLink href="/auth/login" className="text-gray-400 hover:text-white transition-colors">Sign In</LoadingLink></li>
+                <li><LoadingLink href="/auth/register" className="text-gray-400 hover:text-white transition-colors">Get Started</LoadingLink></li>
+                <li><LoadingLink href="/how-it-works" className="text-gray-400 hover:text-white transition-colors">How It Works</LoadingLink></li>
+                <li><LoadingLink href="/plans" className="text-gray-400 hover:text-white transition-colors">Plans & Pricing</LoadingLink></li>
+                <li><LoadingLink href="/about" className="text-gray-400 hover:text-white transition-colors">About Us</LoadingLink></li>
               </ul>
             </div>
 
@@ -1091,7 +1099,7 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Support</h4>
               <ul className="space-y-3">
-                <li><Link href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                <li><LoadingLink href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</LoadingLink></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>

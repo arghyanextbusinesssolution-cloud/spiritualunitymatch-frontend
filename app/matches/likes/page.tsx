@@ -6,7 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useSocket } from '@/contexts/SocketContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/lib/api';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
+import { useLoading } from '@/contexts/LoadingContext';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 
@@ -25,6 +26,7 @@ export default function LikesPage() {
   const [likes, setLikes] = useState<Like[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { startLoading } = useLoading();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const listRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -81,6 +83,7 @@ export default function LikesPage() {
 
       // Show notification and redirect to messages
       alert(data.message || '🎉 It\'s a match! You can now message each other.');
+      startLoading();
       router.push(data.actionUrl || `/messages/${data.userId}`);
     };
 
@@ -91,9 +94,20 @@ export default function LikesPage() {
     };
   }, [socket, connected, user, router, selectedUserId]);
 
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const fetchLikes = async () => {
     try {
       const response = await api.get('/matches/likes');
+      if (!isMounted.current) return;
+      
       if (response.data.success) {
         setLikes(response.data.likes);
         if (response.data.likes.length > 0) {
@@ -101,13 +115,16 @@ export default function LikesPage() {
         }
       }
     } catch (error: any) {
+      if (!isMounted.current) return;
       if (error.response?.status === 403) {
         setError('Standard or Premium plan required to see who liked you');
       } else {
         setError(error.response?.data?.message || 'Error fetching likes');
       }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   };
 
@@ -132,6 +149,7 @@ export default function LikesPage() {
 
         if (response.data.isMutualMatch) {
           alert('🎉 It\'s a match! You can now message each other.');
+          startLoading();
           router.push(`/messages/${userIdString}`);
         } else {
           alert('Like sent! Wait for them to like you back to start messaging.');
@@ -184,9 +202,9 @@ export default function LikesPage() {
                 <p className="text-gray-500 font-bold text-sm leading-relaxed mb-6">
                   Your energy is ready to be discovered. Build your presence and let the souls find their way to you.
                 </p>
-                <Link href="/matches/suggested" className="w-full bg-gradient-to-r from-[#8b5cf6] to-[#ec4899] text-white py-4 rounded-2xl font-black text-base shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center">
+                <LoadingLink href="/matches/suggested" className="w-full bg-gradient-to-r from-[#8b5cf6] to-[#ec4899] text-white py-4 rounded-2xl font-black text-base shadow-lg hover:scale-[1.02] transition-transform flex items-center justify-center">
                   ✨ Browse Matches
-                </Link>
+                </LoadingLink>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-20">
@@ -343,7 +361,10 @@ export default function LikesPage() {
                     ❤️ Like Back
                   </button>
                   <button
-                    onClick={() => router.push(`/messages/${selectedLike.userId}`)}
+                    onClick={() => {
+                      startLoading();
+                      router.push(`/messages/${selectedLike.userId}`);
+                    }}
                     className="w-full bg-white text-[#8346f0] py-3 rounded-2xl font-black text-sm border-2 border-[#8346f0]/10 hover:bg-purple-50 transition-all flex items-center justify-center gap-2"
                   >
                     💬 Message
@@ -426,12 +447,12 @@ export default function LikesPage() {
                 </p>
                 <div className="space-y-3">
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Link
+                    <LoadingLink
                       href="/matches/suggested"
                       className="block bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 rounded-2xl font-bold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all font-black flex items-center justify-center"
                     >
                       🔥 Browse Matches
-                    </Link>
+                    </LoadingLink>
                   </motion.div>
                 </div>
               </div>
@@ -491,7 +512,10 @@ export default function LikesPage() {
                           <span>❤️</span><span>Like Back</span>
                         </motion.button>
                         <motion.button
-                          onClick={() => router.push(`/profile/${like.userId}`)}
+                          onClick={() => {
+                            startLoading();
+                            router.push(`/profile/${like.userId}`);
+                          }}
                           className="px-4 py-3 bg-white/70 backdrop-blur-md border-2 border-purple-300 text-purple-600 rounded-xl font-bold hover:bg-white hover:shadow-lg transition-all flex items-center justify-center gap-2"
                         >
                           👁️

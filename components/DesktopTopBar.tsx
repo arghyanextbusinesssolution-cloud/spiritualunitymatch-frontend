@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 interface DesktopTopBarProps {
     userProfilePhoto?: string | null;
@@ -14,6 +15,7 @@ export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) 
     const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
     const { user } = useAuth();
+    const { startLoading } = useLoading();
     const { showUpgradeModal, hideUpgradeModal } = useSubscription();
     const isBasic = user?.role === 'basic';
 
@@ -51,6 +53,7 @@ export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) 
                                 showUpgradeModal();
                             } else {
                                 console.log(`[TopBar] Access to Likes GRANTED. User role: ${user?.role}. Navigating to /matches/likes.`);
+                                startLoading();
                                 router.push('/matches/likes');
                             }
                         }}
@@ -75,6 +78,7 @@ export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) 
                                 showUpgradeModal();
                             } else {
                                 console.log(`[TopBar] Access to Messages GRANTED. User role: ${user?.role}. Navigating to /messages.`);
+                                startLoading();
                                 router.push('/messages');
                             }
                         }}
@@ -92,6 +96,7 @@ export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) 
                 {/* Profile Widget */}
                 <button
                     onClick={() => {
+                        startLoading();
                         hideUpgradeModal();
                         router.push('/profile');
                     }}

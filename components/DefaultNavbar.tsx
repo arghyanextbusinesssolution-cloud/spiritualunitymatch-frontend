@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { LoadingLink } from './LoadingLink';
 import { SpiritualUnityLogo } from './SpiritualUnityLogo';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -29,39 +29,39 @@ export default function DefaultNavbar() {
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-8">
                         {navItems.map((item) => (
-                            <Link
+                            <LoadingLink
                                 key={item.name}
                                 href={item.link}
                                 className="text-gray-700 hover:text-purple-600 font-medium transition-colors text-sm uppercase tracking-wide"
                             >
                                 {item.name}
-                            </Link>
+                            </LoadingLink>
                         ))}
                     </div>
 
                     {/* Desktop Auth Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
                         {user ? (
-                            <Link
+                            <LoadingLink
                                 href="/matches/suggested"
                                 className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest hover:shadow-lg hover:shadow-purple-500/30 transition-all transform hover:scale-105"
                             >
                                 Dashboard
-                            </Link>
+                            </LoadingLink>
                         ) : (
                             <>
-                                <Link
+                                <LoadingLink
                                     href="/auth/login"
                                     className="text-gray-700 hover:text-purple-600 font-bold transition-colors text-sm uppercase tracking-wide"
                                 >
                                     Log In
-                                </Link>
-                                <Link
+                                </LoadingLink>
+                                <LoadingLink
                                     href="/auth/register"
                                     className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full font-bold text-sm uppercase tracking-widest hover:shadow-lg hover:shadow-purple-500/30 transition-all transform hover:scale-105"
                                 >
                                     Join Free
-                                </Link>
+                                </LoadingLink>
                             </>
                         )}
                     </div>
@@ -94,42 +94,42 @@ export default function DefaultNavbar() {
             {isOpen && (
                 <div className="md:hidden bg-white/95 backdrop-blur-xl border-b border-purple-100 shadow-lg absolute w-full left-0 top-20 flex flex-col items-center py-6 space-y-4">
                     {navItems.map((item) => (
-                        <Link
+                        <LoadingLink
                             key={item.name}
                             href={item.link}
                             className="text-gray-800 hover:text-purple-600 font-bold text-lg uppercase tracking-wide px-4 py-2"
                             onClick={() => setIsOpen(false)}
                         >
                             {item.name}
-                        </Link>
+                        </LoadingLink>
                     ))}
 
                     <div className="w-full h-px bg-purple-100 my-2"></div>
 
                     {user ? (
-                        <Link
+                        <LoadingLink
                             href="/matches/suggested"
                             className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold text-base uppercase tracking-widest shadow-md"
                             onClick={() => setIsOpen(false)}
                         >
                             Enter Dashboard
-                        </Link>
+                        </LoadingLink>
                     ) : (
                         <div className="flex flex-col items-center space-y-4 w-full px-8 mt-2">
-                            <Link
+                            <LoadingLink
                                 href="/auth/login"
                                 className="w-full text-center border-2 border-purple-200 text-purple-600 px-6 py-3 rounded-full font-bold text-base uppercase tracking-widest"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Sign In
-                            </Link>
-                            <Link
+                            </LoadingLink>
+                            <LoadingLink
                                 href="/auth/register"
                                 className="w-full text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold text-base uppercase tracking-widest shadow-md"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Start Journey
-                            </Link>
+                            </LoadingLink>
                         </div>
                     )}
                 </div>

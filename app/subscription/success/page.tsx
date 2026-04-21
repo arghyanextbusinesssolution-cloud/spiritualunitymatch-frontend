@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 
 export default function SubscriptionSuccessPage() {
@@ -66,18 +66,18 @@ export default function SubscriptionSuccessPage() {
             </div>
 
             <div className="space-y-4">
-              <Link
+              <LoadingLink
                 href="/dashboard"
                 className="block w-full bg-spiritual-gradient text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity"
               >
                 Go to Dashboard
-              </Link>
-              <Link
+              </LoadingLink>
+              <LoadingLink
                 href="/matches/suggested"
                 className="block w-full bg-spiritual-violet-100 text-spiritual-violet-700 py-3 rounded-lg font-semibold hover:bg-spiritual-violet-200 transition-colors"
               >
                 Start Matching
-              </Link>
+              </LoadingLink>
             </div>
           </>
         )}

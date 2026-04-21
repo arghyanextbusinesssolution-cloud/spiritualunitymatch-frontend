@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 
@@ -75,13 +75,13 @@ export default function DashboardPage() {
         {/* Top Navigation Bar */}
         <div className="bg-white/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3 flex items-center justify-between shadow-sm">
           <h1 className="text-xl font-bold text-gray-800">spiritualunitymatch</h1>
-          <Link href="/profile" className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+          <LoadingLink href="/profile" className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {userProfilePhoto ? (
               <img src={userProfilePhoto} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <span className="text-gray-600 text-lg">👤</span>
             )}
-          </Link>
+          </LoadingLink>
         </div>
 
         {/* Main Content */}
@@ -94,12 +94,12 @@ export default function DashboardPage() {
             >
               <h2 className="text-xl font-bold text-gray-800 mb-2">Choose Your Plan</h2>
               <p className="text-gray-600 mb-4 text-sm">Select a membership plan to unlock all features</p>
-              <Link
+              <LoadingLink
                 href="/plans"
                 className="block text-center bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-full font-semibold"
               >
                 View Plans
-              </Link>
+              </LoadingLink>
             </motion.div>
           )}
 
@@ -111,18 +111,18 @@ export default function DashboardPage() {
             >
               <h2 className="text-xl font-bold text-gray-800 mb-2">Complete Your Profile</h2>
               <p className="text-gray-600 mb-4 text-sm">Create your profile to start matching</p>
-              <Link
+              <LoadingLink
                 href="/profile/setup"
                 className="block text-center bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-full font-semibold"
               >
                 Setup Profile
-              </Link>
+              </LoadingLink>
             </motion.div>
           )}
 
           {subscription && profile && (
             <div className="grid grid-cols-2 gap-4">
-              <Link
+              <LoadingLink
                 href="/matches/suggested"
                 className="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center justify-center min-h-[140px] hover:shadow-2xl transition-shadow"
               >
@@ -132,9 +132,9 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 text-center">Browse Matches</h3>
-              </Link>
+              </LoadingLink>
 
-              <Link
+              <LoadingLink
                 href="/matches/likes"
                 className="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center justify-center min-h-[140px] hover:shadow-2xl transition-shadow"
               >
@@ -144,9 +144,9 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 text-center">Likes You</h3>
-              </Link>
+              </LoadingLink>
 
-              <Link
+              <LoadingLink
                 href="/messages"
                 className="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center justify-center min-h-[140px] hover:shadow-2xl transition-shadow"
               >
@@ -156,9 +156,9 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 text-center">Messages</h3>
-              </Link>
+              </LoadingLink>
 
-              <Link
+              <LoadingLink
                 href="/profile"
                 className="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center justify-center min-h-[140px] hover:shadow-2xl transition-shadow"
               >
@@ -168,9 +168,9 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 text-center">Profile</h3>
-              </Link>
+              </LoadingLink>
 
-              <Link
+              <LoadingLink
                 href="/events"
                 className="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center justify-center min-h-[140px] hover:shadow-2xl transition-shadow"
               >
@@ -180,17 +180,17 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <h3 className="font-semibold text-gray-800 text-center">Events</h3>
-              </Link>
+              </LoadingLink>
             </div>
           )}
 
           {user?.role === 'admin' && (
-            <Link
+            <LoadingLink
               href="/admin"
               className="block mt-6 bg-white rounded-3xl shadow-xl p-4 text-center font-semibold text-gray-800"
             >
               Admin Panel
-            </Link>
+            </LoadingLink>
           )}
 
           <button

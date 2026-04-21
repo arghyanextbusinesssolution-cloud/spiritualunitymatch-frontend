@@ -9,6 +9,7 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 import ChatWindow from '@/components/ChatWindow';
 
@@ -24,6 +25,7 @@ export default function MessagesPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const { showUpgradeModal } = useSubscription();
+  const { startLoading } = useLoading();
   const isBasic = user?.role === 'basic';
   const { socket, connected } = useSocket();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -49,9 +51,20 @@ export default function MessagesPage() {
     }
   };
 
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const fetchConversations = useCallback(async () => {
     try {
       const response = await api.get('/messages/conversations');
+      if (!isMounted.current) return;
+      
       if (response.data.success) {
         const formattedConversations = response.data.conversations.map((conv: any) => ({
           userId: conv.userId?.toString() || conv.userId,
@@ -69,13 +82,16 @@ export default function MessagesPage() {
         }
       }
     } catch (error: any) {
+      if (!isMounted.current) return;
       if (error.response?.status === 403) {
         showUpgradeModal();
       }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
-  }, [router, selectedUserId]);
+  }, [router, selectedUserId, showUpgradeModal]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -172,6 +188,7 @@ export default function MessagesPage() {
                     transition={{ delay: index * 0.05 }}
                     onClick={() => {
                       if (window.innerWidth < 768) {
+                        startLoading();
                         router.push(`/messages/${conv.userId}`);
                       } else {
                         setSelectedUserId(conv.userId);

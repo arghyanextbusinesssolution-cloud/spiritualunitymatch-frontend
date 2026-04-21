@@ -5,14 +5,28 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/lib/api';
+import { useLoading } from '@/contexts/LoadingContext';
 
-const TOTAL_STEPS = 6;
+import dynamic from 'next/dynamic';
+
+const TOTAL_STEPS = 7;
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5MB as per backend
 const ALLOWED_PHOTO_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
+// Dynamically import LocationPicker to avoid SSR issues with Leaflet
+const LocationPicker = dynamic(() => import('@/components/LocationPicker'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] bg-gray-100 animate-pulse rounded-2xl flex items-center justify-center text-gray-400 font-medium">
+      Loading Maps...
+    </div>
+  ),
+});
 
 export default function ProfileSetupPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const { startLoading } = useLoading();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -31,6 +45,7 @@ export default function ProfileSetupPage() {
     spiritualPractices: [] as string[],
     activityLevel: 'moderate',
     intentBadges: [] as string[],
+    location: null as any,
   });
 
   const handleChange = (field: string, value: any) => {
@@ -106,33 +121,40 @@ export default function ProfileSetupPage() {
       },
       2: () => {
         const stepErrors: { [key: string]: string } = {};
-        if (photos.length === 0) stepErrors.photos = 'Upload at least one photo';
+        if (!formData.location) stepErrors.location = 'Please select your city';
         
         setErrors(stepErrors);
         return Object.keys(stepErrors).length === 0;
       },
       3: () => {
         const stepErrors: { [key: string]: string } = {};
-        if (!formData.relationshipIntention) stepErrors.relationshipIntention = 'Select an intention';
+        if (photos.length === 0) stepErrors.photos = 'Upload at least one photo';
         
         setErrors(stepErrors);
         return Object.keys(stepErrors).length === 0;
       },
       4: () => {
         const stepErrors: { [key: string]: string } = {};
-        if (formData.spiritualBeliefs.length === 0) stepErrors.spiritualBeliefs = 'Select at least one';
+        if (!formData.relationshipIntention) stepErrors.relationshipIntention = 'Select an intention';
         
         setErrors(stepErrors);
         return Object.keys(stepErrors).length === 0;
       },
       5: () => {
         const stepErrors: { [key: string]: string } = {};
-        if (formData.spiritualPractices.length === 0) stepErrors.spiritualPractices = 'Select at least one';
+        if (formData.spiritualBeliefs.length === 0) stepErrors.spiritualBeliefs = 'Select at least one';
         
         setErrors(stepErrors);
         return Object.keys(stepErrors).length === 0;
       },
       6: () => {
+        const stepErrors: { [key: string]: string } = {};
+        if (formData.spiritualPractices.length === 0) stepErrors.spiritualPractices = 'Select at least one';
+        
+        setErrors(stepErrors);
+        return Object.keys(stepErrors).length === 0;
+      },
+      7: () => {
         const stepErrors: { [key: string]: string } = {};
         // Final step - bio is optional, no validation needed
         setErrors(stepErrors);
@@ -186,6 +208,9 @@ export default function ProfileSetupPage() {
     if (formData.spiritualPractices.length === 0) {
       newErrors.spiritualPractices = 'Please select at least one spiritual practice';
     }
+    if (!formData.location) {
+      newErrors.location = 'Please select your city';
+    }
     if (photos.length === 0) {
       newErrors.photos = 'Please upload at least one photo (max 5 photos, 5MB each)';
     }
@@ -232,6 +257,9 @@ export default function ProfileSetupPage() {
       formDataToSend.append('activityLevel', formData.activityLevel);
       formDataToSend.append('intentBadges', JSON.stringify(formData.intentBadges));
       formDataToSend.append('ageRange', JSON.stringify(formData.ageRange));
+      if (formData.location) {
+        formDataToSend.append('location', JSON.stringify(formData.location));
+      }
       
       // Add photos
       photos.forEach((photo) => {
@@ -259,6 +287,7 @@ export default function ProfileSetupPage() {
       }
 
       console.log('🎉 Profile created successfully!', { userId: data.profile?.user, profileId: data.profile?._id });
+      startLoading();
       router.push('/plans');
     } catch (error: any) {
       console.error('❌ Profile save error:', error.message);
@@ -386,10 +415,31 @@ export default function ProfileSetupPage() {
             </motion.div>
           )}
 
-          {/* Step 2: Photo Upload */}
+          {/* Step 2: Location Selection */}
           {currentStep === 2 && (
             <motion.div
               key="step2"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              className="bg-white rounded-3xl shadow-xl p-6"
+            >
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Where are you located?</h2>
+              <p className="text-gray-600 mb-6">Find souls in your spiritual community nearby.</p>
+
+              <LocationPicker 
+                onLocationSelect={(loc) => handleChange('location', loc)} 
+                initialLocation={formData.location}
+              />
+              
+              {errors.location && <p className="text-red-500 text-sm mt-4">✗ {errors.location}</p>}
+            </motion.div>
+          )}
+
+          {/* Step 3: Photo Upload */}
+          {currentStep === 3 && (
+            <motion.div
+              key="step3"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
@@ -461,10 +511,10 @@ export default function ProfileSetupPage() {
             </motion.div>
           )}
 
-          {/* Step 3: Relationship Intent */}
-          {currentStep === 3 && (
+          {/* Step 4: Relationship Intent */}
+          {currentStep === 4 && (
             <motion.div
-              key="step2"
+              key="step4"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
@@ -502,10 +552,10 @@ export default function ProfileSetupPage() {
             </motion.div>
           )}
 
-          {/* Step 4: Spiritual Beliefs */}
-          {currentStep === 4 && (
+          {/* Step 5: Spiritual Beliefs */}
+          {currentStep === 5 && (
             <motion.div
-              key="step3"
+              key="step5"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
@@ -543,10 +593,10 @@ export default function ProfileSetupPage() {
             </motion.div>
           )}
 
-          {/* Step 5: Spiritual Practices */}
-          {currentStep === 5 && (
+          {/* Step 6: Spiritual Practices */}
+          {currentStep === 6 && (
             <motion.div
-              key="step4"
+              key="step6"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
@@ -584,10 +634,10 @@ export default function ProfileSetupPage() {
             </motion.div>
           )}
 
-          {/* Step 6: Bio */}
-          {currentStep === 6 && (
+          {/* Step 7: Bio */}
+          {currentStep === 7 && (
             <motion.div
-              key="step6"
+              key="step7"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}

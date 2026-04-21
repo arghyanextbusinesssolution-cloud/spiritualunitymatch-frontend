@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 interface Match {
   userId: string;
@@ -28,16 +29,26 @@ export default function SuggestedMatchesPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const { showUpgradeModal } = useSubscription();
+  const { startLoading } = useLoading();
   const isBasic = user?.role === 'basic';
   const [matches, setMatches] = useState<Match[]>([]);
+  const [nearbyMatches, setNearbyMatches] = useState<Match[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [filterLoading, setFilterLoading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'for-you' | 'nearby'>('for-you');
   const [isLiking, setIsLiking] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
   const [mutualMatchData, setMutualMatchData] = useState<{ userId: string, profile: any } | null>(null);
   const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+
+  // Filter state
+  const [filterAgeMin, setFilterAgeMin] = useState(18);
+  const [filterAgeMax, setFilterAgeMax] = useState(60);
+  const [filterDistance, setFilterDistance] = useState(500); // km
+  const [filterInterests, setFilterInterests] = useState<string[]>([]);
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setToast({ message, type });
@@ -53,9 +64,14 @@ export default function SuggestedMatchesPage() {
 
     if (user) {
       fetchMatches();
+      fetchNearbyMatches();
       fetchUserProfile();
     }
   }, [user, authLoading, router]);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [activeTab]);
 
   const fetchUserProfile = async () => {
     try {
@@ -68,11 +84,31 @@ export default function SuggestedMatchesPage() {
     }
   };
 
-  const fetchMatches = async () => {
+  const fetchNearbyMatches = async () => {
     try {
-      const response = await api.get('/matches/suggested');
+      const response = await api.get('/matches/suggested?sortByDistance=true');
+      if (response.data.success) {
+        setNearbyMatches(response.data.matches);
+      }
+    } catch (error) {
+      console.error('Fetch nearby matches error:', error);
+    }
+  };
+
+  const fetchMatches = async (filters?: { minAge?: number; maxAge?: number; maxDistance?: number; spiritualInterests?: string[] }) => {
+    try {
+      const params = new URLSearchParams();
+      if (filters?.minAge) params.set('minAge', String(filters.minAge));
+      if (filters?.maxAge) params.set('maxAge', String(filters.maxAge));
+      if (filters?.maxDistance) params.set('maxDistance', String(filters.maxDistance));
+      if (filters?.spiritualInterests && filters.spiritualInterests.length > 0) {
+        params.set('spiritualInterests', filters.spiritualInterests.join(','));
+      }
+      const query = params.toString() ? `?${params.toString()}` : '';
+      const response = await api.get(`/matches/suggested${query}`);
       if (response.data.success) {
         setMatches(response.data.matches);
+        setCurrentIndex(0);
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
@@ -80,29 +116,52 @@ export default function SuggestedMatchesPage() {
       }
     } finally {
       setLoading(false);
+      setFilterLoading(false);
     }
   };
 
+  const handleApplyFilters = () => {
+    setFilterLoading(true);
+    setShowFilterPanel(false);
+    fetchMatches({
+      minAge: filterAgeMin,
+      maxAge: filterAgeMax,
+      maxDistance: filterDistance,
+      spiritualInterests: filterInterests,
+    });
+  };
+
+  const toggleInterest = (interest: string) => {
+    setFilterInterests(prev =>
+      prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
+    );
+  };
+
   const advanceToNext = (removedUserId?: string) => {
-    const userIdToRemove = removedUserId || matches[currentIndex]?.userId;
-    setMatches((prevMatches) => {
+    const isNearby = activeTab === 'nearby';
+    const currentArray = isNearby ? nearbyMatches : matches;
+    const userIdToRemove = removedUserId || currentArray[currentIndex]?.userId;
+
+    const updateState = (prevMatches: Match[]) => {
       const newMatches = prevMatches.filter((m) => m.userId !== userIdToRemove);
-
-      // If we are about to run out of matches, fetch more
       if (newMatches.length <= 1) {
-        fetchMatches();
+        if (isNearby) fetchNearbyMatches();
+        else fetchMatches();
       }
-
-      // Adjust index if we removed the last item
       setCurrentIndex((prevIndex) => {
         if (prevIndex >= newMatches.length && newMatches.length > 0) {
           return newMatches.length - 1;
         }
         return prevIndex;
       });
-
       return newMatches;
-    });
+    };
+
+    if (isNearby) {
+      setNearbyMatches(updateState);
+    } else {
+      setMatches(updateState);
+    }
   };
 
   const handleLike = async (userId: string) => {
@@ -112,16 +171,22 @@ export default function SuggestedMatchesPage() {
       if (response.data.success) {
         if (response.data.isMutualMatch) {
           // Show beautiful popup instead of alert
+          const matchArray = activeTab === 'nearby' ? nearbyMatches : matches;
           setMutualMatchData({
             userId: userId,
-            profile: matches.find(m => m.userId === userId)?.profile || {}
+            profile: matchArray.find(m => m.userId === userId)?.profile || {}
           });
         } else {
           advanceToNext(userId);
         }
       }
     } catch (error: any) {
-      showToast(error.response?.data?.message || 'Error liking user', 'error');
+      if (error.response?.data?.requiresUpgrade) {
+        showUpgradeModal();
+        showToast(error.response.data.message || 'Limit reached. Upgrade to send more likes.', 'error');
+      } else {
+        showToast(error.response?.data?.message || 'Error liking user', 'error');
+      }
     } finally {
       setIsLiking(false);
     }
@@ -188,7 +253,8 @@ export default function SuggestedMatchesPage() {
     );
   }
 
-  const currentMatch = matches[currentIndex];
+  const currentMatchArray = activeTab === 'nearby' ? nearbyMatches : matches;
+  const currentMatch = currentMatchArray[currentIndex];
   const userProfilePhoto = userProfile?.photos?.find((p: any) => p.isPrimary)?.url || userProfile?.photos?.[0]?.url;
 
   return (
@@ -205,78 +271,114 @@ export default function SuggestedMatchesPage() {
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-[15px] font-semibold text-gray-700">Age Range</span>
-                  <span className="text-[13px] font-bold text-gray-400">22 — 30</span>
+                  <span className="text-[13px] font-bold text-gray-400">{filterAgeMin} — {filterAgeMax}</span>
                 </div>
-                <div className="h-1.5 bg-gray-200/50 rounded-full relative">
-                  <div className="absolute inset-y-0 left-1/4 right-1/4 bg-[#8b5cf6]/40 rounded-full" />
-                  <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#8b5cf6] rounded-full shadow-sm" />
-                  <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#8b5cf6] rounded-full shadow-sm" />
+                <div className="flex gap-3">
+                  <input 
+                    type="number" 
+                    min="18" 
+                    max={filterAgeMax}
+                    value={filterAgeMin}
+                    onChange={(e) => setFilterAgeMin(Number(e.target.value))}
+                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/50 transition-all"
+                  />
+                  <input 
+                    type="number" 
+                    min={filterAgeMin} 
+                    max="100"
+                    value={filterAgeMax}
+                    onChange={(e) => setFilterAgeMax(Number(e.target.value))}
+                    className="w-full bg-white/50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/50 transition-all"
+                  />
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-[15px] font-semibold text-gray-700">Distance</span>
-                  <span className="text-[13px] font-bold text-gray-400">25 km</span>
+                  <span className="text-[13px] font-bold text-gray-400">{filterDistance} km</span>
                 </div>
-                <div className="h-1.5 bg-gray-200/50 rounded-full relative">
-                  <div className="absolute inset-y-0 left-0 right-1/3 bg-[#8b5cf6]/40 rounded-full" />
-                  <div className="absolute top-1/2 right-1/3 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#8b5cf6] rounded-full shadow-sm" />
-                </div>
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="500" 
+                  value={filterDistance}
+                  onChange={(e) => setFilterDistance(Number(e.target.value))}
+                  className="w-full h-1.5 bg-gray-200/50 rounded-full appearance-none cursor-pointer accent-[#8b5cf6]"
+                />
               </div>
             </div>
 
             {/* Spiritual Interests */}
             <div className="space-y-4">
               <h3 className="text-sm font-bold text-gray-800 mb-3">Spiritual Interests</h3>
-              {['Meditation', 'Yoga', 'Mindfulness'].map((interest, i) => (
-                <label key={interest} className="flex items-center justify-between group cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${i === 0 ? 'bg-[#8b5cf6] border-[#8b5cf6]' : 'border-gray-200 bg-white/50'
-                      }`}>
-                      {i === 0 && (
-                        <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
+              {['Meditation', 'Yoga', 'Mindfulness', 'Astrology', 'Healing'].map((interest) => {
+                const isActive = filterInterests.includes(interest);
+                return (
+                  <label key={interest} className="flex items-center justify-between group cursor-pointer" onClick={() => toggleInterest(interest)}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isActive ? 'bg-[#8b5cf6] border-[#8b5cf6]' : 'border-gray-200 bg-white/50'
+                        }`}>
+                        {isActive && (
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-[14px] text-gray-600 font-medium group-hover:text-gray-900 transition-colors">{interest}</span>
                     </div>
-                    <span className="text-[14px] text-gray-600 font-medium group-hover:text-gray-900 transition-colors">{interest}</span>
-                  </div>
-                  <div className={`w-5 h-5 rounded-md border flex items-center justify-center ${i === 0 ? 'bg-[#3b82f6] border-[#3b82f6]' : 'bg-[#3b82f6]/80 border-[#3b82f6]/80'
-                    }`}>
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                </label>
-              ))}
+                  </label>
+                );
+              })}
             </div>
+
+            <button 
+              onClick={handleApplyFilters}
+              disabled={filterLoading}
+              className="w-full mt-6 bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex justify-center items-center"
+            >
+              {filterLoading ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                'Apply Filters'
+              )}
+            </button>
           </div>
 
           {/* Nearby Souls List */}
           <div className="bg-white/40 backdrop-blur-xl rounded-[32px] p-6 border border-white/20 shadow-sm flex-1">
             <h2 className="text-lg font-bold text-gray-800 mb-5">Nearby Souls</h2>
             <div className="space-y-5 overflow-y-auto max-h-[300px] pr-2 custom-scrollbar">
-              {[
-                { name: 'Maya', age: 25, dist: '1 km', img: 'https://i.pravatar.cc/150?u=maya' },
-                { name: 'Rahul', age: 28, dist: '3 km', img: 'https://i.pravatar.cc/150?u=rahul' },
-                { name: 'Priya', age: 24, dist: '5 km', img: 'https://i.pravatar.cc/150?u=priya' }
-              ].map((soul) => (
-                <div key={soul.name} className="flex items-center justify-between group cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <img src={soul.img} alt={soul.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-100" />
-                    <div>
-                      <h4 className="text-[14px] font-bold text-gray-800">{soul.name}, {soul.age}</h4>
-                      <p className="text-[12px] text-gray-400 font-medium">Kolkata • {soul.dist} away</p>
+              {nearbyMatches.length === 0 ? (
+                <p className="text-gray-400 text-sm">No nearby souls found.</p>
+              ) : (
+                nearbyMatches.slice(0, 5).map((soul) => {
+                  const name = soul.profile?.name || 'Soul';
+                  const age = soul.profile?.age || '?';
+                  const dist = soul.profile?.location?.city ? `${soul.profile.location.city} • ${getDistance(soul)} away` : `${getDistance(soul)} away`;
+                  const img = soul.profile?.photos?.find((p: any) => p.isPrimary)?.url || soul.profile?.photos?.[0]?.url || 'https://via.placeholder.com/150';
+                  
+                  return (
+                    <div key={soul.userId} className="flex items-center justify-between group cursor-pointer" onClick={() => router.push(`/profile/${soul.userId}`)}>
+                      <div className="flex items-center gap-3">
+                        <img src={img} alt={name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm ring-1 ring-gray-100" />
+                        <div>
+                          <h4 className="text-[14px] font-bold text-gray-800">{name}, {age}</h4>
+                          <p className="text-[12px] text-gray-400 font-medium">{dist}</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleLike(soul.userId); }}
+                        className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center text-[#8b5cf6] hover:bg-[#8b5cf6] hover:text-white transition-all shadow-sm"
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        </svg>
+                      </button>
                     </div>
-                  </div>
-                  <button className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center text-[#8b5cf6] hover:bg-[#8b5cf6] hover:text-white transition-all shadow-sm">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-              ))}
+                  );
+                })
+              )}
             </div>
           </div>
         </aside>
@@ -288,7 +390,7 @@ export default function SuggestedMatchesPage() {
               <div className="text-6xl mb-6">💜</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">No Matches Found</h2>
               <p className="text-gray-500 mb-8">Check back later for new matches!</p>
-              <button onClick={fetchMatches} className="bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all">
+              <button onClick={() => fetchMatches()} className="bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all">
                 Refresh
               </button>
             </div>
@@ -392,41 +494,20 @@ export default function SuggestedMatchesPage() {
           )}
         </section>
 
-        {/* SECTION 4: Next Matches (Far Right - Optional padding placeholder or mini card) */}
-        <div className="w-56 flex flex-col gap-6 pt-4">
-          <div className="bg-white/20 backdrop-blur-md rounded-3xl p-5 border border-white/10 shadow-sm">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-sm font-bold text-gray-800">Next Matches</span>
-              <span className="text-gray-400">→</span>
-            </div>
-            <div className="flex flex-col gap-4">
-              {[
-                { n: 'Asha', p: '82%', img: 'https://i.pravatar.cc/100?u=asha' },
-                { n: 'Ravi', p: '76%', img: 'https://i.pravatar.cc/100?u=ravi' },
-                { n: 'Sneha', p: '70%', img: 'https://i.pravatar.cc/100?u=sneha' }
-              ].map(m => (
-                <div key={m.n} className="flex flex-col items-center gap-1 group cursor-pointer">
-                  <img src={m.img} className="w-12 h-12 rounded-full object-cover border-2 border-white group-hover:scale-110 transition-all shadow-sm" />
-                  <span className="text-[11px] font-bold text-gray-700">{m.n}</span>
-                  <span className="text-[10px] font-bold text-[#8b5cf6]/60">{m.p}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+
       </div>
 
       {/* ═══ MOBILE VIEW (unchanged) — hidden on md+ ═══ */}
       <div className="md:hidden min-h-screen bg-gradient-to-b from-green-50 to-yellow-50 flex flex-col max-w-md mx-auto pb-20">
         {/* Top Navigation Bar */}
         <div className="bg-white/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3 flex items-center justify-between">
-          <Link href="/profile" className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+          <LoadingLink href="/profile" className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {userProfilePhoto ? (
               <img src={userProfilePhoto} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <span className="text-gray-600 text-lg">👤</span>
             )}
-          </Link>
+          </LoadingLink>
 
           {/* Tabs */}
           <div className="flex items-center gap-6">
@@ -458,12 +539,22 @@ export default function SuggestedMatchesPage() {
             </button>
           </div>
 
-          {/* Flame Icon Button */}
-          <button className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
-            </svg>
-          </button>
+          {/* Header Buttons */}
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setShowFilterPanel(true)}
+              className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-[#8b5cf6] shadow-sm hover:bg-white/90"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+            </button>
+            <button className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Main Content - Profile Card */}
@@ -474,7 +565,7 @@ export default function SuggestedMatchesPage() {
               <h2 className="text-2xl font-bold text-gray-800 mb-2">No Matches Found</h2>
               <p className="text-gray-600 mb-6">Check back later for new matches!</p>
               <button
-                onClick={fetchMatches}
+                onClick={() => fetchMatches()}
                 className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-3 rounded-full font-semibold"
               >
                 Refresh
@@ -626,6 +717,73 @@ export default function SuggestedMatchesPage() {
 
       </div>
 
+      {/* Mobile Filter Modal */}
+      {showFilterPanel && (
+        <div className="md:hidden fixed inset-0 z-[100] flex items-end">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowFilterPanel(false)} />
+          <motion.div 
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            className="relative w-full bg-white rounded-t-[32px] p-6 pb-10 shadow-2xl max-h-[85vh] overflow-y-auto"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Discover Settings</h2>
+              <button onClick={() => setShowFilterPanel(false)} className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold text-gray-800">Age Range</h3>
+                <div className="flex items-center gap-4">
+                  <div className="flex-1 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <label className="text-xs text-gray-400 font-medium block mb-1">Min Age</label>
+                    <input type="number" min="18" max="100" value={filterAgeMin} onChange={(e) => setFilterAgeMin(Number(e.target.value))} className="w-full bg-transparent outline-none font-bold text-gray-800" />
+                  </div>
+                  <div className="text-gray-300 font-bold">-</div>
+                  <div className="flex-1 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <label className="text-xs text-gray-400 font-medium block mb-1">Max Age</label>
+                    <input type="number" min="18" max="100" value={filterAgeMax} onChange={(e) => setFilterAgeMax(Number(e.target.value))} className="w-full bg-transparent outline-none font-bold text-gray-800" />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-end">
+                  <h3 className="text-sm font-bold text-gray-800">Maximum Distance</h3>
+                  <span className="text-[13px] font-bold text-[#8b5cf6] bg-purple-50 px-3 py-1 rounded-full">{filterDistance} km</span>
+                </div>
+                <input type="range" min="1" max="500" value={filterDistance} onChange={(e) => setFilterDistance(Number(e.target.value))} className="w-full h-1.5 bg-gray-200/50 rounded-full appearance-none cursor-pointer accent-[#8b5cf6]" />
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-sm font-bold text-gray-800">Spiritual Interests</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {['Meditation', 'Yoga', 'Mindfulness', 'Astrology', 'Healing'].map((interest) => {
+                    const isActive = filterInterests.includes(interest);
+                    return (
+                      <label key={interest} className="flex items-center gap-3 group cursor-pointer" onClick={() => toggleInterest(interest)}>
+                        <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${isActive ? 'bg-[#8b5cf6] border-[#8b5cf6]' : 'border-gray-200 bg-white'}`}>
+                          {isActive && <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                        </div>
+                        <span className="text-[14px] text-gray-600 font-medium">{interest}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+              <button 
+                onClick={handleApplyFilters}
+                disabled={filterLoading}
+                className="w-full mt-4 bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white py-4 rounded-xl font-bold shadow-lg flex justify-center items-center"
+              >
+                {filterLoading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : 'Apply Filters'}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* Mutual Match Popup Overlay */}
       {mutualMatchData && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -663,7 +821,10 @@ export default function SuggestedMatchesPage() {
 
             <div className="flex flex-col gap-3 relative z-10">
               <button
-                onClick={() => router.push(`/messages/${mutualMatchData.userId}`)}
+                onClick={() => {
+                  startLoading();
+                  router.push(`/messages/${mutualMatchData.userId}`);
+                }}
                 className="w-full bg-gradient-to-r from-[#8b5cf6] to-[#f472b6] text-white py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all active:scale-95"
               >
                 Message Now

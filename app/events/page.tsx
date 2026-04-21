@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -179,7 +179,7 @@ export default function EventsPage() {
         {/* Events Layout */}
         <div className="space-y-8">
           {filteredEvents.length === 0 ? (
-            <div className="bg-white/40 backdrop-blur-2xl rounded-[48px] border border-white/60 p-20 text-center flex flex-col items-center justify-center space-y-8 shadow-2xl">
+            <div className="bg-white/40 backdrop-blur-2xl rounded-[48px] border border-white/60 p-8 md:p-20 text-center flex flex-col items-center justify-center space-y-8 shadow-2xl mx-4 md:mx-0">
               <div className="relative">
                 <div className="w-28 h-28 bg-white/40 rounded-full flex items-center justify-center text-6xl shadow-inner animate-float">
                   🕯️
@@ -204,7 +204,7 @@ export default function EventsPage() {
               </div>
               <button
                 onClick={() => setFilter('all')}
-                className="bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest shadow-xl hover:shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all"
+                className="w-full md:w-auto bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-6 md:px-10 py-4 rounded-full font-black text-[11px] md:text-sm uppercase tracking-widest shadow-xl hover:shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all"
               >
                 Browse All Events
               </button>
@@ -245,9 +245,9 @@ export default function EventsPage() {
 
                     {/* Content Area */}
                     <div className="flex-1 flex flex-col justify-center py-2">
-                      <Link href={`/events/${evt._id}`} className="text-3xl font-black text-gray-900 group-hover:text-[#8b5cf6] transition-all mb-3 leading-tight tracking-tight">
+                      <LoadingLink href={`/events/${evt._id}`} className="text-3xl font-black text-gray-900 group-hover:text-[#8b5cf6] transition-all mb-3 leading-tight tracking-tight">
                         {evt.title}
-                      </Link>
+                      </LoadingLink>
 
                       <div className="flex flex-wrap gap-6 text-[14px] text-gray-500 font-bold mb-5">
                         <div className="flex items-center gap-2.5">
@@ -278,12 +278,12 @@ export default function EventsPage() {
                       </p>
 
                       <div className="mt-8 flex items-center gap-4">
-                        <Link
+                        <LoadingLink
                           href={`/events/${evt._id}`}
                           className="px-8 py-3 rounded-2xl bg-white/80 backdrop-blur-xl text-[#8b5cf6] font-black text-xs uppercase tracking-[0.15em] border border-white shadow-lg hover:bg-[#8b5cf6] hover:text-white hover:scale-[1.05] transition-all active:scale-95"
                         >
                           View Details
-                        </Link>
+                        </LoadingLink>
                         {!isRegistered && !isClosed && (
                           <span className="text-[10px] font-black uppercase tracking-widest text-orange-500 opacity-60">
                             ✦ Registration Open

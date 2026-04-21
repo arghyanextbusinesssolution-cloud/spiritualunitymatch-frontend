@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import api from '@/lib/api';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
+import { useLoading } from '@/contexts/LoadingContext';
 import DefaultNavbar from '@/components/DefaultNavbar';
 
 interface Plan {
@@ -69,6 +70,7 @@ const plans: Plan[] = [
 export default function PlansPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const { startLoading } = useLoading();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -91,6 +93,7 @@ export default function PlansPage() {
       });
 
       if (response.data.success) {
+        startLoading(); // Trigger global loader before redirect
         if (response.data.redirectUrl) {
           router.push(response.data.redirectUrl);
         } else {
@@ -205,12 +208,12 @@ export default function PlansPage() {
             <p className="text-xl font-bold text-gray-800 mb-6">
               Ready to find your spiritual connection?
             </p>
-            <Link
+            <LoadingLink
               href="/auth/register"
               className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-12 py-4 rounded-full font-black uppercase tracking-widest text-sm hover:shadow-2xl hover:shadow-purple-500/30 transition-all hover:scale-105"
             >
               Start Your Journey Today
-            </Link>
+            </LoadingLink>
           </div>
         </motion.div>
       </div>

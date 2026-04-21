@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import api from '@/lib/api';
+import { useLoading } from '@/contexts/LoadingContext';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 
 const SPIRITUAL_BELIEFS = [
@@ -22,6 +23,7 @@ const SPIRITUAL_PRACTICES = [
 export default function EditProfilePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const { startLoading } = useLoading();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<any>(null);
@@ -128,6 +130,7 @@ export default function EditProfilePage() {
       if (response.data.success) {
         setSuccessMessage('Profile updated successfully! ✨');
         setTimeout(() => {
+          startLoading();
           router.push('/profile');
         }, 2000);
       }

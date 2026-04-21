@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { LoadingLink } from '@/components/LoadingLink';
 import api from '@/lib/api';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
 
@@ -114,12 +114,12 @@ export default function ProfilePage() {
             <div className="text-6xl mb-4">💜</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">No Profile Found</h2>
             <p className="text-gray-600 mb-6">Create your profile to start matching!</p>
-            <Link
+            <LoadingLink
               href="/profile/setup"
               className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all"
             >
               Create Profile
-            </Link>
+            </LoadingLink>
           </div>
         </div>
       </div>
@@ -173,7 +173,14 @@ export default function ProfilePage() {
               </div>
 
               {/* Identity */}
-              <h1 className="text-3xl font-black text-gray-800 tracking-tight uppercase mb-1">{profile.name}</h1>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-3xl font-black text-gray-800 tracking-tight uppercase">{profile.name}</h1>
+                {profile.isPremium && (
+                  <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
+                    <span className="text-[12px]">👑</span> PREMIUM
+                  </span>
+                )}
+              </div>
               <p className="text-purple-600 text-[11px] font-black uppercase tracking-[0.2em] mb-4">{profile.nickname || 'Spiritual seeker'}</p>
 
               {/* Vital Details */}
@@ -187,6 +194,11 @@ export default function ProfilePage() {
                 <span className="bg-white/40 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-gray-600 border border-white/20 uppercase tracking-widest flex items-center gap-1.5 capitalize">
                   <span className="opacity-40 text-xs">💖</span> Seeking {profile.genderPreference?.join(', ') || 'All'}
                 </span>
+                {profile.location && (
+                  <span className="bg-white/40 backdrop-blur-md px-3 py-1.5 rounded-full text-[10px] font-black text-gray-600 border border-white/20 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="opacity-40 text-xs">📍</span> {profile.location.city}, {profile.location.country}
+                  </span>
+                )}
               </div>
 
               {profile.user?.email && (
@@ -212,7 +224,7 @@ export default function ProfilePage() {
               </div>
 
               <div className="mt-8 w-full">
-                <Link
+                <LoadingLink
                   href="/profile/edit"
                   className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-purple-200 hover:scale-[1.02] transition-all"
                 >
@@ -220,7 +232,7 @@ export default function ProfilePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                   Edit profile
-                </Link>
+                </LoadingLink>
               </div>
             </motion.div>
 
@@ -241,12 +253,12 @@ export default function ProfilePage() {
                     {subscription.plan === 'standard' && '⭐ Match seeker'}
                     {subscription.plan === 'premium' && '👑 Divine premium'}
                   </h3>
-                  <Link
+                  <LoadingLink
                     href="/subscription"
                     className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-[10px] font-black px-4 py-2 rounded-xl transition-colors uppercase tracking-widest"
                   >
                     Manage connection →
-                  </Link>
+                  </LoadingLink>
                 </div>
               </motion.div>
             )}
@@ -288,7 +300,7 @@ export default function ProfilePage() {
                         </svg>
                       </button>
                     ) : (
-                      <Link
+                      <LoadingLink
                         href={item.href}
                         className="w-full bg-white/40 hover:bg-white/60 transition-all border border-white/20 rounded-2xl p-4 flex items-center justify-between group"
                       >
@@ -299,7 +311,7 @@ export default function ProfilePage() {
                         <svg className="w-4 h-4 text-gray-300 group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                         </svg>
-                      </Link>
+                      </LoadingLink>
                     )}
                   </motion.div>
                 ))}

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface SubscriptionContextType {
     isUpgradeModalOpen: boolean;
@@ -12,9 +13,15 @@ const SubscriptionContext = createContext<SubscriptionContextType | undefined>(u
 
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
     const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+    const pathname = usePathname();
 
     const showUpgradeModal = () => setIsUpgradeModalOpen(true);
     const hideUpgradeModal = () => setIsUpgradeModalOpen(false);
+
+    // Auto-close modal when route changes
+    useEffect(() => {
+        hideUpgradeModal();
+    }, [pathname]);
 
     return (
         <SubscriptionContext.Provider

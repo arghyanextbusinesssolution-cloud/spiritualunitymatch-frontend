@@ -79,7 +79,7 @@ export default function UpgradeOverlay() {
     return (
         <AnimatePresence>
             {isUpgradeModalOpen && (
-                <div className="fixed inset-0 md:left-64 z-[100] flex items-center justify-center p-4 md:p-8 lg:p-12 overflow-hidden">
+                <div key="upgrade-modal-overlay" className="fixed inset-0 md:left-64 z-[100] flex items-center justify-center p-4 md:p-8 lg:p-12 overflow-hidden">
                     {/* Immersive Background */}
                     <motion.div
                         initial={{ opacity: 0 }}

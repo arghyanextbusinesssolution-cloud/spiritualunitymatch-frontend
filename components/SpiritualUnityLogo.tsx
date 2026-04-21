@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { LoadingLink } from './LoadingLink';
 import Image from 'next/image';
 
 interface SpiritualUnityLogoProps {
@@ -9,7 +9,7 @@ interface SpiritualUnityLogoProps {
 
 export const SpiritualUnityLogo = ({ className = "", width = 40, height = 40 }: SpiritualUnityLogoProps) => {
   return (
-    <Link
+    <LoadingLink
       href="/"
       className={`relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 ${className}`}
     >
@@ -23,6 +23,6 @@ export const SpiritualUnityLogo = ({ className = "", width = 40, height = 40 }: 
         />
       </div>
       {/* <span className="font-medium text-black dark:text-white">Spiritual Unity Match</span> */}
-    </Link>
+    </LoadingLink>
   );
 };

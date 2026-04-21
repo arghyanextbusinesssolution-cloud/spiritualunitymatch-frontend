@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useLoading } from '@/contexts/LoadingContext';
 
 interface BottomNavigationProps {
   userProfilePhoto?: string | null;
@@ -12,6 +13,7 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useAuth();
+  const { startLoading } = useLoading();
   const { showUpgradeModal, hideUpgradeModal } = useSubscription();
   const isBasic = user?.role === 'basic';
 
@@ -104,6 +106,7 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
                 } else {
                   console.log(`[BottomNav] Navigating to unrestricted route: ${item.href}`);
                 }
+                startLoading(); // Trigger global loader
                 hideUpgradeModal();
                 router.push(item.href);
               }

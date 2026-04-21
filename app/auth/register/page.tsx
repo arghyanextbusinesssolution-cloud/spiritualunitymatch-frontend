@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLoading } from '@/contexts/LoadingContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link'
 import Image from 'next/image';
@@ -11,6 +12,7 @@ import ComingSoonModal from '@/components/ComingSoonModal';
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
+  const { startLoading } = useLoading();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -38,6 +40,7 @@ export default function RegisterPage() {
 
     try {
       await register(email, password);
+      startLoading();
       router.push('/profile/setup');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -285,7 +288,11 @@ export default function RegisterPage() {
               <div className="text-center">
                 <p className="text-gray-600">
                   Already have an account?{' '}
-                  <Link href="/auth/login" className="text-purple-600 font-semibold hover:underline">
+                  <Link 
+                    href="/auth/login" 
+                    onClick={() => startLoading()}
+                    className="text-purple-600 font-semibold hover:underline"
+                  >
                     Sign In
                   </Link>
                 </p>
