@@ -402,7 +402,7 @@ const HeartSyncGame = () => {
 
 // Image Slider component
 const ImageSlider = () => {
-  const images = ['/photo1.webp', '/photo2.webp', '/photo3.webp'];
+  const images = ['https://res.cloudinary.com/dxx54fccl/image/upload/v1776788211/photo1_xx7mbe.webp', 'https://res.cloudinary.com/dxx54fccl/image/upload/v1776788211/photo2_bmtjyv.webp', 'https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/photo3_wxhucm.webp'];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -499,7 +499,7 @@ export default function HomePage() {
               >
                 <div className="mb-6 flex justify-center lg:justify-start">
                   <Image
-                    src="/logo.webp"
+                    src="https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp"
                     alt="Spiritual Unity Match Logo"
                     width={200}
                     height={200}

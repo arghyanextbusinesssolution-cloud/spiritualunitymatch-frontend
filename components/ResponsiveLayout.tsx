@@ -18,7 +18,7 @@ export default function ResponsiveLayout({ children, userProfilePhoto }: Respons
             <div
                 className="fixed inset-0 z-0 bg-cover bg-center pointer-events-none"
                 style={{
-                    backgroundImage: 'url("/dreamy-background.png")',
+                    backgroundImage: 'url("https://res.cloudinary.com/dxx54fccl/image/upload/v1776788211/dreamy-background_obkrdv.png")',
                     backgroundAttachment: 'fixed'
                 }}
             />

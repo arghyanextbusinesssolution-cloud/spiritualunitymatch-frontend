@@ -15,7 +15,7 @@ export const SpiritualUnityLogo = ({ className = "", width = 40, height = 40 }: 
     >
       <div className="relative" style={{ width, height }}>
         <Image
-          src="/logo.webp"
+          src="https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp"
           alt="Spiritual Unity Logo"
           fill
           className="object-contain"

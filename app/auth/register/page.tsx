@@ -115,7 +115,7 @@ export default function RegisterPage() {
             {/* Logo for mobile */}
             <div className="mb-8 lg:hidden">
                   <Image
-              src="/logo.webp"
+              src="https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp"
               alt="Spiritual Unity Match Logo"
               width={200}
               height={200}
