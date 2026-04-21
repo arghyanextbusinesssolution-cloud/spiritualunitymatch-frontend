@@ -1,19 +1,23 @@
 /** @type {import('next').NextConfig} */
+const path = require("path");
+
 const nextConfig = {
   reactStrictMode: true,
+
   images: {
-    domains: ['localhost', 'res.cloudinary.com'],
+    domains: ["localhost", "res.cloudinary.com"],
     unoptimized: true,
   },
-  // Output configuration for standalone build (helps with Render deployment)
-  output: 'standalone',
-  // Ensure trailing slash handling
-  trailingSlash: false,
+
+  // IMPORTANT: Required for Hostinger Static Hosting
+  output: "export",
+
+  trailingSlash: true,
+
   webpack: (config) => {
-    config.resolve.alias['@'] = require('path').resolve(__dirname);
+    config.resolve.alias["@"] = path.resolve(__dirname);
     return config;
   },
-}
+};
 
-module.exports = nextConfig
-
+module.exports = nextConfig;
