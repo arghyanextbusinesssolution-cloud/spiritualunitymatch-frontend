@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['localhost', 'res.cloudinary.com'],
-    unoptimized: false,
+    unoptimized: true,
   },
   // Output configuration for standalone build (helps with Render deployment)
   output: 'standalone',
