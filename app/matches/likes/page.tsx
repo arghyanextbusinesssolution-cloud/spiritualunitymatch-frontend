@@ -197,7 +197,7 @@ export default function LikesPage() {
           <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar">
             {likes.length === 0 && !error ? (
               <div className="h-full flex flex-col items-center justify-center text-center max-w-sm mx-auto py-8">
-                <div className="text-7xl mb-6 animate-bounce-slow">💜</div>
+                <div className="text-7xl mb-6 animate-bounce-slow">✨</div>
                 <h2 className="text-xl font-black text-gray-800 mb-3">The Universe Awaits</h2>
                 <p className="text-gray-500 font-bold text-sm leading-relaxed mb-6">
                   Your energy is ready to be discovered. Build your presence and let the souls find their way to you.
@@ -436,7 +436,7 @@ export default function LikesPage() {
                   transition={{ duration: 3, repeat: Infinity }}
                   className="text-7xl mb-6"
                 >
-                  💜
+                  ✨
                 </motion.div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-3">Hearts Waiting</h2>
                 <p className="text-gray-600 text-center mb-2">

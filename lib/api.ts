@@ -7,11 +7,12 @@ import Cookies from 'js-cookie';
 
 // API client configuration
 // This is like a helper that talks to our backend server
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '');
 
 console.log('🌐 [API] Initializing with URL:', API_URL);
 console.log('🌐 [API] Environment:', process.env.NODE_ENV);
-console.log('🌐 [API] Public API URL env:', process.env.NEXT_PUBLIC_API_URL);
+console.log('🌐 [API] Public API URL env:', process.env.NEXT_PUBLIC_API_URL || 'Not Set (using fallback)');
+
 
 const api = axios.create({
   baseURL: API_URL,

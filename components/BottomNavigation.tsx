@@ -119,12 +119,9 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
                 className="flex flex-col items-center justify-center gap-1 flex-1 min-w-0"
               >
                 <div
-                  className={`${isCenter
-                    ? 'w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 shadow-lg flex items-center justify-center'
-                    : `w-10 h-10 rounded-full flex items-center justify-center transition-colors ${active
-                      ? 'bg-purple-100 text-purple-600'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${active
+                    ? 'bg-purple-100 text-purple-600'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     } ${item.isProfile && !userProfilePhoto ? 'bg-gray-100' : ''}`}
                 >
                   {item.isProfile && userProfilePhoto ? (
@@ -140,6 +137,7 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
                     </div>
                   )}
                 </div>
+
                 <span
                   className={`text-[10px] font-medium leading-tight ${active ? 'text-purple-600' : 'text-gray-600'
                     }`}

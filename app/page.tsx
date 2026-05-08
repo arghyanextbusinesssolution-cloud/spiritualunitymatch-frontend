@@ -659,7 +659,7 @@ export default function HomePage() {
                 className="rounded-3xl"
               >
                 <div className="text-center p-8">
-                  <div className="text-6xl mb-4">💜</div>
+                  <div className="text-6xl mb-4">✨</div>
                   <h3 className="text-2xl font-bold text-white mb-4">Our Philosophy</h3>
                   <p className="text-white leading-relaxed max-w-sm">
                     "Find alignment before attraction" - We believe true connections come from shared values, spiritual paths, and conscious intentions, not just physical attraction.
@@ -717,7 +717,7 @@ export default function HomePage() {
                 description: 'Tools and features to support your personal and spiritual growth'
               },
               {
-                icon: '💜',
+                icon: '✨',
                 title: 'Authentic Profiles',
                 description: 'Comprehensive profiles that reflect your true self and intentions'
               }
@@ -1109,7 +1109,7 @@ export default function HomePage() {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Spiritual Unity Match. All rights reserved. Made with 💜 for conscious connections. Designed by <a href="https://nextbusinesssolution.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Next Business Solution</a>.
+              © {new Date().getFullYear()} Spiritual Unity Match. All rights reserved. Made with ✨ for conscious connections. Designed by <a href="https://nextbusinesssolution.com/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Next Business Solution</a>.
             </p>
           </div>
         </div>

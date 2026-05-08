@@ -55,7 +55,18 @@ a {
   background: linear-gradient(135deg, #ede9fe 0%, #dbeafe 100%);
 }
 
+/* Spiritual violet color utilities */
+.text-spiritual-violet-600 {
+  color: #7c3aed;
+}
 
+.text-spiritual-violet-700 {
+  color: #6d28d9;
+}
+
+.bg-spiritual-violet-600 {
+  background-color: #9a86bb;
+}
 
 @layer base {
   :root {

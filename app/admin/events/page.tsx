@@ -15,8 +15,11 @@ export default function AdminEventsPage() {
     endDate: '',
     location: '',
     capacity: '',
-    visibleToPlans: []
+    visibleToPlans: [],
+    isPaid: false,
+    price: ''
   });
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -76,12 +79,16 @@ export default function AdminEventsPage() {
         endDate: form.endDate || null,
         location: form.location,
         capacity: form.capacity ? parseInt(form.capacity) : undefined,
-        visibleToPlans: form.visibleToPlans
+        visibleToPlans: form.visibleToPlans,
+        isPaid: form.isPaid,
+        price: form.isPaid ? parseFloat(form.price) : 0
       };
+
 
       const res = await api.post('/events', payload);
       if (res.data.success) {
-        setForm({ title: '', description: '', startDate: '', endDate: '', location: '', capacity: '', visibleToPlans: [] });
+        setForm({ title: '', description: '', startDate: '', endDate: '', location: '', capacity: '', visibleToPlans: [], isPaid: false, price: '' });
+
         setImageFile(null);
         setIsModalOpen(false);
         fetchEvents();
@@ -347,7 +354,52 @@ export default function AdminEventsPage() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Pricing Type</label>
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, isPaid: false })}
+                        className={`flex-1 py-4 rounded-2xl font-bold transition-all border ${!form.isPaid ? 'bg-green-500 text-white border-green-500 shadow-lg shadow-green-500/20' : 'bg-white/40 text-gray-500 border-white/60'}`}
+                      >
+                        Free Event
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, isPaid: true })}
+                        className={`flex-1 py-4 rounded-2xl font-bold transition-all border ${form.isPaid ? 'bg-[#8b5cf6] text-white border-[#8b5cf6] shadow-lg shadow-purple-500/20' : 'bg-white/40 text-gray-500 border-white/60'}`}
+                      >
+                        Paid Event
+                      </button>
+                    </div>
+                  </div>
+
+                  {form.isPaid && (
+                    <motion.div 
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-3"
+                    >
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Ticket Price (USD) *</label>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                          <span className="text-gray-400 font-bold">$</span>
+                        </div>
+                        <input
+                          value={form.price}
+                          onChange={(e) => setForm({ ...form, price: e.target.value })}
+                          placeholder="0.00"
+                          type="number"
+                          step="0.01"
+                          className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/50 border border-white/60 text-gray-900 font-bold placeholder:text-gray-300 focus:outline-none focus:ring-4 focus:ring-[#8b5cf6]/10 focus:border-[#8b5cf6]/30 transition-all shadow-sm text-base"
+                          required={form.isPaid}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
+
 
                 <div className="space-y-6 pt-2">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Visible to Plans</label>

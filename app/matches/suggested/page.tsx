@@ -258,6 +258,7 @@ export default function SuggestedMatchesPage() {
   const userProfilePhoto = userProfile?.photos?.find((p: any) => p.isPrimary)?.url || userProfile?.photos?.[0]?.url;
 
   return (
+    //Res
     <ResponsiveLayout userProfilePhoto={userProfilePhoto}>
       {/* ═══ DESKTOP VIEW (3-Section Layout) — hidden on mobile ═══ */}
       <div className="hidden md:flex h-full gap-8 px-8 py-6">
@@ -274,17 +275,17 @@ export default function SuggestedMatchesPage() {
                   <span className="text-[13px] font-bold text-gray-400">{filterAgeMin} — {filterAgeMax}</span>
                 </div>
                 <div className="flex gap-3">
-                  <input 
-                    type="number" 
-                    min="18" 
+                  <input
+                    type="number"
+                    min="18"
                     max={filterAgeMax}
                     value={filterAgeMin}
                     onChange={(e) => setFilterAgeMin(Number(e.target.value))}
                     className="w-full bg-white/50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#8b5cf6]/50 transition-all"
                   />
-                  <input 
-                    type="number" 
-                    min={filterAgeMin} 
+                  <input
+                    type="number"
+                    min={filterAgeMin}
                     max="100"
                     value={filterAgeMax}
                     onChange={(e) => setFilterAgeMax(Number(e.target.value))}
@@ -298,10 +299,10 @@ export default function SuggestedMatchesPage() {
                   <span className="text-[15px] font-semibold text-gray-700">Distance</span>
                   <span className="text-[13px] font-bold text-gray-400">{filterDistance} km</span>
                 </div>
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="500" 
+                <input
+                  type="range"
+                  min="1"
+                  max="500"
                   value={filterDistance}
                   onChange={(e) => setFilterDistance(Number(e.target.value))}
                   className="w-full h-1.5 bg-gray-200/50 rounded-full appearance-none cursor-pointer accent-[#8b5cf6]"
@@ -332,7 +333,7 @@ export default function SuggestedMatchesPage() {
               })}
             </div>
 
-            <button 
+            <button
               onClick={handleApplyFilters}
               disabled={filterLoading}
               className="w-full mt-6 bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition-all flex justify-center items-center"
@@ -357,7 +358,7 @@ export default function SuggestedMatchesPage() {
                   const age = soul.profile?.age || '?';
                   const dist = soul.profile?.location?.city ? `${soul.profile.location.city} • ${getDistance(soul)} away` : `${getDistance(soul)} away`;
                   const img = soul.profile?.photos?.find((p: any) => p.isPrimary)?.url || soul.profile?.photos?.[0]?.url || 'https://via.placeholder.com/150';
-                  
+
                   return (
                     <div key={soul.userId} className="flex items-center justify-between group cursor-pointer" onClick={() => router.push(`/profile/${soul.userId}`)}>
                       <div className="flex items-center gap-3">
@@ -367,7 +368,7 @@ export default function SuggestedMatchesPage() {
                           <p className="text-[12px] text-gray-400 font-medium">{dist}</p>
                         </div>
                       </div>
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); handleLike(soul.userId); }}
                         className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center text-[#8b5cf6] hover:bg-[#8b5cf6] hover:text-white transition-all shadow-sm"
                       >
@@ -387,7 +388,7 @@ export default function SuggestedMatchesPage() {
         <section className="flex-1 flex flex-col items-center justify-start pt-4">
           {matches.length === 0 ? (
             <div className="bg-white/60 backdrop-blur-xl rounded-[40px] p-12 text-center shadow-xl border border-white/40">
-              <div className="text-6xl mb-6">💜</div>
+              <div className="text-6xl mb-6">✨</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">No Matches Found</h2>
               <p className="text-gray-500 mb-8">Check back later for new matches!</p>
               <button onClick={() => fetchMatches()} className="bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all">
@@ -541,7 +542,7 @@ export default function SuggestedMatchesPage() {
 
           {/* Header Buttons */}
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={() => setShowFilterPanel(true)}
               className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-[#8b5cf6] shadow-sm hover:bg-white/90"
             >
@@ -561,7 +562,7 @@ export default function SuggestedMatchesPage() {
         <div className="flex-1 flex items-center justify-center px-4 py-6">
           {matches.length === 0 ? (
             <div className="bg-white rounded-3xl shadow-xl p-8 text-center">
-              <div className="text-6xl mb-4">💜</div>
+              <div className="text-6xl mb-4">✨</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">No Matches Found</h2>
               <p className="text-gray-600 mb-6">Check back later for new matches!</p>
               <button
@@ -721,11 +722,11 @@ export default function SuggestedMatchesPage() {
       {showFilterPanel && (
         <div className="md:hidden fixed inset-0 z-[100] flex items-end">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowFilterPanel(false)} />
-          <motion.div 
+          <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            className="relative w-full bg-white rounded-t-[32px] p-6 pb-10 shadow-2xl max-h-[85vh] overflow-y-auto"
+            className="relative w-full bg-white rounded-t-[32px] p-6 pb-28 shadow-2xl max-h-[75vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Discover Settings</h2>
@@ -733,7 +734,7 @@ export default function SuggestedMatchesPage() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-            
+
             <div className="space-y-6">
               <div className="space-y-4">
                 <h3 className="text-sm font-bold text-gray-800">Age Range</h3>
@@ -772,7 +773,7 @@ export default function SuggestedMatchesPage() {
                   })}
                 </div>
               </div>
-              <button 
+              <button
                 onClick={handleApplyFilters}
                 disabled={filterLoading}
                 className="w-full mt-4 bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white py-4 rounded-xl font-bold shadow-lg flex justify-center items-center"

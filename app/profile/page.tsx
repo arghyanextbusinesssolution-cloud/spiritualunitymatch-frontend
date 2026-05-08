@@ -111,7 +111,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gradient-to-b from-purple-50 via-pink-50 to-purple-50 flex flex-col max-w-md mx-auto">
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-lg p-8 text-center w-full border border-purple-200">
-            <div className="text-6xl mb-4">💜</div>
+            <div className="text-6xl mb-4">✨</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">No Profile Found</h2>
             <p className="text-gray-600 mb-6">Create your profile to start matching!</p>
             <LoadingLink

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import api from '@/lib/api';
 
 interface CheckInCalendarProps {
@@ -43,52 +42,29 @@ export default function CheckInCalendar({ onDateSelect }: CheckInCalendarProps) 
     }
   };
 
-  const getDaysInMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (date: Date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
-
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    setCurrentDate(prev => {
-      const newDate = new Date(prev);
-      if (direction === 'prev') {
-        newDate.setMonth(prev.getMonth() - 1);
-      } else {
-        newDate.setMonth(prev.getMonth() + 1);
-      }
-      return newDate;
-    });
-  };
+  const getDaysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const getFirstDayOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
   const daysInMonth = getDaysInMonth(currentDate);
   const firstDay = getFirstDayOfMonth(currentDate);
   const today = new Date();
   const isCurrentMonth = currentDate.getMonth() === today.getMonth() && currentDate.getFullYear() === today.getFullYear();
 
-  const days = [];
-  // Empty cells for days before the first day of the month
-  for (let i = 0; i < firstDay; i++) {
-    days.push(null);
-  }
-  // Days of the month
-  for (let day = 1; day <= daysInMonth; day++) {
-    days.push(day);
-  }
+  const days: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) days.push(null);
+  for (let day = 1; day <= daysInMonth; day++) days.push(day);
 
   const getDateString = (day: number | null) => {
     if (day === null) return '';
-    const date = new Date(year, month, day);
-    return date.toISOString().split('T')[0];
+    const d = new Date(year, month, day);
+    return d.toISOString().split('T')[0];
   };
 
   const getEmotionEmoji = (emotion: string) => {
@@ -97,7 +73,7 @@ export default function CheckInCalendar({ onDateSelect }: CheckInCalendarProps) 
       heavy: '😔',
       open: '😊',
       confused: '😕',
-      hopeful: '✨'
+      hopeful: '✨',
     };
     return emojiMap[emotion] || '○';
   };
@@ -108,100 +84,77 @@ export default function CheckInCalendar({ onDateSelect }: CheckInCalendarProps) 
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="w-full bg-white/40 backdrop-blur-xl rounded-3xl border border-white/60 overflow-hidden shadow-lg">
+      <div className="flex items-center justify-between px-3 pt-3 pb-2">
         <button
-          onClick={() => navigateMonth('prev')}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          onClick={() => setCurrentDate(new Date(year, month - 1))}
+          className="w-7 h-7 rounded-lg bg-white/50 border border-white/60 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
         >
-          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg className="w-3 h-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h3 className="text-lg font-bold text-gray-800">
+
+        <h3 className="text-[10px] font-black text-gray-900 tracking-widest uppercase">
           {monthNames[month]} {year}
         </h3>
+
         <button
-          onClick={() => navigateMonth('next')}
-          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          onClick={() => setCurrentDate(new Date(year, month + 1))}
+          className="w-7 h-7 rounded-lg bg-white/50 border border-white/60 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
         >
-          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg className="w-3 h-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+        <div className="flex justify-center py-6">
+          <div className="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : (
-        <>
-          {/* Day names header */}
-          <div className="grid grid-cols-7 gap-2 mb-2">
-            {dayNames.map(day => (
-              <div key={day} className="text-center text-xs font-medium text-gray-500 py-2">
-                {day}
-              </div>
+        <div className="px-2 pb-3 w-full">
+          <div className="grid grid-cols-7 mb-1 w-full">
+            {dayNames.map((day, idx) => (
+              <div key={idx} className="text-center text-[8px] font-black text-gray-400 py-1 uppercase">{day}</div>
             ))}
           </div>
 
-          {/* Calendar grid */}
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-1 w-full">
             {days.map((day, index) => {
               const dateString = getDateString(day);
               const checkInData = day !== null ? checkIns[dateString] : null;
               const isTodayDate = isToday(day);
 
               return (
-                <motion.button
+                <div
                   key={index}
                   onClick={() => {
                     if (day !== null && onDateSelect) {
                       onDateSelect(new Date(year, month, day));
                     }
                   }}
-                  disabled={day === null}
                   className={`
-                    aspect-square rounded-xl text-sm font-medium transition-all
-                    ${day === null ? 'bg-transparent' : 'bg-gray-50 hover:bg-gray-100'}
-                    ${isTodayDate ? 'ring-2 ring-purple-500' : ''}
-                    ${checkInData?.hasCheckIn ? 'bg-purple-200 hover:bg-purple-300 border-2 border-purple-400' : ''}
+                    aspect-square rounded-lg flex flex-col items-center justify-center relative transition-all
+                    ${day === null ? 'bg-transparent' : 'bg-white/30 border border-white/20 cursor-pointer active:scale-95'}
+                    ${isTodayDate ? 'ring-1 ring-purple-500 bg-white/60' : ''}
+                    ${checkInData?.hasCheckIn ? 'bg-purple-100/50 border-purple-200' : ''}
                   `}
-                  whileHover={day !== null ? { scale: 1.05 } : {}}
-                  whileTap={day !== null ? { scale: 0.95 } : {}}
                 >
                   {day !== null && (
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <span className={isTodayDate ? 'font-bold text-purple-600' : 'text-gray-700'}>
-                        {day}
-                      </span>
+                    <>
+                      <span className={`text-[9px] font-black ${isTodayDate ? 'text-purple-600' : 'text-gray-700'}`}>{day}</span>
                       {checkInData?.hasCheckIn && (
-                        <span className="text-lg mt-1">
-                          {getEmotionEmoji(checkInData.emotion)}
-                        </span>
+                        <span className="text-[7px] absolute bottom-0.5 right-0.5">{getEmotionEmoji(checkInData.emotion)}</span>
                       )}
-                    </div>
+                    </>
                   )}
-                </motion.button>
+                </div>
               );
             })}
           </div>
-
-          {/* Legend */}
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-center gap-4 text-xs text-gray-600">
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 rounded bg-purple-100"></div>
-                <span>Checked in</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-3 h-3 rounded border-2 border-purple-500"></div>
-                <span>Today</span>
-              </div>
-            </div>
-          </div>
-        </>
+        </div>
       )}
     </div>
   );

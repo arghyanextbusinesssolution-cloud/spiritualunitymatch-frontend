@@ -86,22 +86,27 @@ export default function PlansPage() {
     }
 
     setLoading(true);
+    console.log(`💳 [PLANS] Selecting plan: ${plan}`);
     try {
       const response = await api.post('/subscriptions/create-checkout', {
         plan,
         billingCycle: 'monthly',
       });
 
+      console.log('💳 [PLANS] API Response:', response.data);
+
       if (response.data.success) {
+        console.log('💳 [PLANS] Checkout session created. Redirecting to:', response.data.redirectUrl || '/subscription/success');
         startLoading(); // Trigger global loader before redirect
         if (response.data.redirectUrl) {
-          router.push(response.data.redirectUrl);
+          // Use window.location.href for external Stripe URL
+          window.location.href = response.data.redirectUrl;
         } else {
           router.push('/subscription/success');
         }
       }
     } catch (error: any) {
-      console.error('Checkout error:', error);
+      console.error('💳 [PLANS] Checkout error:', error);
       alert(error.response?.data?.message || 'Error activating subscription');
     } finally {
       setLoading(false);

@@ -79,7 +79,7 @@ export default function UserProfilePage() {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-yellow-50 flex flex-col max-w-md mx-auto">
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="bg-white rounded-3xl shadow-xl p-8 text-center w-full">
-            <div className="text-6xl mb-4">💜</div>
+            <div className="text-6xl mb-4">✨</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Error</h2>
             <p className="text-gray-600 mb-6">{error}</p>
           </div>
@@ -93,7 +93,7 @@ export default function UserProfilePage() {
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-yellow-50 flex flex-col max-w-md mx-auto">
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="bg-white rounded-3xl shadow-xl p-8 text-center w-full">
-            <div className="text-6xl mb-4">💜</div>
+            <div className="text-6xl mb-4">✨</div>
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Profile Not Found</h2>
             <p className="text-gray-600 mb-6">This profile could not be found.</p>
             <LoadingLink

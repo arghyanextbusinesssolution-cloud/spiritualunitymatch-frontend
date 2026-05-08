@@ -525,7 +525,7 @@ export default function ProfileSetupPage() {
 
               <div className="space-y-3">
                 {[
-                  { value: 'conscious-partnership', label: 'Conscious Partnership', icon: '💜' },
+                  { value: 'conscious-partnership', label: 'Conscious Partnership', icon: '✨' },
                   { value: 'marriage-oriented', label: 'Marriage-Oriented', icon: '💍' },
                   { value: 'spiritual-friendship', label: 'Spiritual Friendship', icon: '🧘' },
                   { value: 'healing-companion', label: 'Healing Companion', icon: '🌱' },

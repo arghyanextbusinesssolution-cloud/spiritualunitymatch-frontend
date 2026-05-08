@@ -33,8 +33,12 @@ export default function EditProfilePage() {
     name: '',
     email: '',
     spiritualBeliefs: [] as string[],
-    spiritualPractices: [] as string[]
+    spiritualPractices: [] as string[],
+    city: '',
+    state: '',
+    country: ''
   });
+
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -57,8 +61,12 @@ export default function EditProfilePage() {
           name: profile.name || '',
           email: profile.user?.email || user?.email || '',
           spiritualBeliefs: profile.spiritualBeliefs || [],
-          spiritualPractices: profile.spiritualPractices || []
+          spiritualPractices: profile.spiritualPractices || [],
+          city: profile.location?.city || '',
+          state: profile.location?.state || '',
+          country: profile.location?.country || ''
         });
+
       }
     } catch (error) {
       console.error('Fetch profile error:', error);
@@ -124,8 +132,14 @@ export default function EditProfilePage() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         spiritualBeliefs: formData.spiritualBeliefs,
-        spiritualPractices: formData.spiritualPractices
+        spiritualPractices: formData.spiritualPractices,
+        location: {
+          city: formData.city.trim(),
+          state: formData.state.trim(),
+          country: formData.country.trim()
+        }
       });
+
 
       if (response.data.success) {
         setSuccessMessage('Profile updated successfully! ✨');
@@ -252,7 +266,50 @@ export default function EditProfilePage() {
                   />
                   {errors.email && <p className="text-red-500 text-xs font-bold mt-2 pl-4">{errors.email}</p>}
                 </motion.div>
+
+                {/* Location Section */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}>
+                    <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 pl-4">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.city}
+                      onChange={(e) => handleChange('city', e.target.value)}
+                      placeholder="City"
+                      className="w-full bg-white/50 backdrop-blur-md border border-white/40 rounded-full px-6 py-4 text-gray-800 font-bold placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/20 transition-all shadow-inner focus:border-purple-300"
+                    />
+                  </motion.div>
+
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
+                    <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 pl-4">
+                      State/Province
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.state}
+                      onChange={(e) => handleChange('state', e.target.value)}
+                      placeholder="State"
+                      className="w-full bg-white/50 backdrop-blur-md border border-white/40 rounded-full px-6 py-4 text-gray-800 font-bold placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/20 transition-all shadow-inner focus:border-purple-300"
+                    />
+                  </motion.div>
+
+                  <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }}>
+                    <label className="block text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 pl-4">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.country}
+                      onChange={(e) => handleChange('country', e.target.value)}
+                      placeholder="Country"
+                      className="w-full bg-white/50 backdrop-blur-md border border-white/40 rounded-full px-6 py-4 text-gray-800 font-bold placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/20 transition-all shadow-inner focus:border-purple-300"
+                    />
+                  </motion.div>
+                </div>
               </div>
+
 
               {/* Spiritual Beliefs */}
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="pt-4 border-t border-white/20">

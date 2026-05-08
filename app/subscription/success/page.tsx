@@ -12,20 +12,53 @@ export default function SubscriptionSuccessPage() {
   const sessionId = searchParams.get('session_id');
   const [loading, setLoading] = useState(false);
 
-  // TEST MODE: No need to wait for webhook, subscription is already activated
+  // Poll for subscription status
   useEffect(() => {
-    // Just verify subscription exists
-    const verifySubscription = async () => {
+    let pollCount = 0;
+    const maxPolls = 15; // Poll for up to 30 seconds
+    let intervalId: NodeJS.Timeout;
+
+    const checkSubscription = async () => {
+      console.log(`🔍 [SUCCESS] Polling subscription status... (Attempt ${pollCount + 1})`);
       try {
-        await api.get('/subscriptions/my-subscription');
+        const response = await api.get('/subscriptions/my-subscription');
+        const subscription = response.data.subscription;
+        
+        console.log('🔍 [SUCCESS] Current Subscription:', subscription);
+
+        if (subscription && subscription.isActive) {
+          console.log('✅ [SUCCESS] Subscription is active!');
+          setLoading(false);
+          clearInterval(intervalId);
+        } else {
+          pollCount++;
+          if (pollCount >= maxPolls) {
+            console.log('⚠️ [SUCCESS] Polling timed out.');
+            setLoading(false);
+            clearInterval(intervalId);
+          }
+        }
       } catch (error) {
-        console.error('Error verifying subscription:', error);
+        console.error('❌ [SUCCESS] Error verifying subscription:', error);
+        pollCount++;
+        if (pollCount >= maxPolls) {
+          setLoading(false);
+          clearInterval(intervalId);
+        }
       }
-      setLoading(false);
     };
+
+    setLoading(true);
+    // Start polling
+    intervalId = setInterval(checkSubscription, 2000);
     
-    verifySubscription();
-  }, []);
+    // Initial check
+    checkSubscription();
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [sessionId]);
 
   return (
     <div className="min-h-screen bg-spiritual-gradient-light flex items-center justify-center p-4">

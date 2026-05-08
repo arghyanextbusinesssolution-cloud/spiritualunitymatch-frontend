@@ -106,7 +106,7 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: '💜',
+                icon: '✨',
                 title: 'Authenticity',
                 description: 'We believe in genuine connections built on truth, transparency, and mutual respect.'
               },

@@ -9,10 +9,12 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  // IMPORTANT: Required for Hostinger Static Hosting
-  output: "export",
-
-  trailingSlash: true,
+  // Only use export mode for production builds on Hostinger
+  // Remove this for local development to enable dynamic features
+  ...(process.env.NODE_ENV === 'production' && {
+    output: "export",
+    trailingSlash: true,
+  }),
 
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname);

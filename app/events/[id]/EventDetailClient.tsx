@@ -6,6 +6,10 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import ResponsiveLayout from '@/components/ResponsiveLayout';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -61,16 +65,31 @@ export default function EventDetailPage() {
     if (!user) return router.push('/auth/login');
     try {
       setRegistering(true);
+      
+      // If event is paid, create checkout session
+      if (event.isPaid && event.price > 0) {
+        console.log('💳 [EVENT] Creating checkout session for paid event');
+        const res = await api.post(`/events/${id}/create-checkout`);
+        if (res.data.success && res.data.url) {
+          window.location.href = res.data.url;
+          return;
+        }
+        throw new Error('Failed to create checkout session');
+      }
+
+      // If free, register directly
       const res = await api.post(`/events/${id}/register`);
       if (res.data.success) {
         fetchEvent();
       }
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Error registering');
+      console.error('Registration error:', err);
+      alert(err.response?.data?.message || err.message || 'Error registering');
     } finally {
       setRegistering(false);
     }
   };
+
 
   const handleCancel = async () => {
     if (!confirm('Cancel your registration for this spiritual gathering?')) return;
@@ -208,7 +227,22 @@ export default function EventDetailPage() {
                   </div>
                 </div>
               )}
+
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl ${event.isPaid ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-[#8b5cf6]/10 text-[#8b5cf6] border-[#8b5cf6]/20'} flex items-center justify-center border shadow-inner`}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Pricing</p>
+                  <p className={`font-bold text-lg ${event.isPaid ? 'text-green-600' : 'text-[#8b5cf6]'}`}>
+                    {event.isPaid ? `$${event.price.toFixed(2)}` : 'FREE Gathering'}
+                  </p>
+                </div>
+              </div>
             </div>
+
 
             <div className="prose prose-spiritual max-w-none mb-12">
               <h3 className="text-xl font-black text-gray-900 mb-4">About this Journey</h3>
@@ -232,8 +266,9 @@ export default function EventDetailPage() {
                     disabled={registering || (event.capacity && registrations.length >= event.capacity)}
                     className="w-full sm:w-auto bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-12 py-4 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:shadow-purple-500/30 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:grayscale disabled:hover:scale-100"
                   >
-                    {registering ? 'Aligning...' : (event.capacity && registrations.length >= event.capacity ? 'Full Capacity' : 'Join Gathering')}
+                    {registering ? 'Aligning...' : (event.capacity && registrations.length >= event.capacity ? 'Full Capacity' : (event.isPaid ? `Pay $${event.price.toFixed(2)} & Join` : 'Join Gathering'))}
                   </button>
+
                 )
               ) : (
                 <div className="bg-gray-100/50 backdrop-blur-md px-10 py-4 rounded-[24px] border border-gray-200">

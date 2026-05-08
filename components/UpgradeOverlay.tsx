@@ -116,7 +116,7 @@ export default function UpgradeOverlay() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 50 }}
                         transition={{ type: 'spring', duration: 0.8, bounce: 0.2 }}
-                        className="relative w-full max-w-6xl max-h-[90vh] flex flex-col items-center z-10"
+                        className="relative w-full max-w-6xl max-h-[95vh] md:max-h-[90vh] flex flex-col items-center z-10 overflow-y-auto custom-scrollbar py-8 px-2"
                     >
                         {/* Header Area */}
                         <div className="text-center mb-6 md:mb-10">
@@ -139,7 +139,7 @@ export default function UpgradeOverlay() {
                         </div>
 
                         {/* Plans Grid */}
-                        <div className="w-full flex flex-col md:flex-row gap-6 lg:gap-10 items-stretch justify-center px-4 overflow-y-auto custom-scrollbar pb-8">
+                        <div className="w-full flex flex-col md:flex-row gap-6 lg:gap-10 items-stretch justify-center px-2 md:px-4">
                             {plans.map((plan, index) => (
                                 <motion.div
                                     key={plan.plan}

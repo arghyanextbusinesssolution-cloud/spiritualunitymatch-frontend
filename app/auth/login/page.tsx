@@ -65,7 +65,7 @@ export default function LoginPage() {
               transition={{ delay: 0.3 }}
               className="relative z-10"
             >
-              <div className="text-8xl mb-8">💜</div>
+              <div className="text-8xl mb-8">✨</div>
               <div className="text-center">
                 <h2 className="text-4xl font-bold mb-4">Welcome Back</h2>
                 <p className="text-xl opacity-90">Continue your spiritual journey</p>

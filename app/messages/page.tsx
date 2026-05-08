@@ -169,7 +169,7 @@ export default function MessagesPage() {
           <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
             {conversations.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-8">
-                <div className="text-6xl mb-4 grayscale opacity-30">💜</div>
+                <div className="text-6xl mb-4 grayscale opacity-30">✨</div>
                 <h2 className="text-xl font-black text-gray-400 uppercase tracking-widest">No Connections</h2>
               </div>
             ) : (

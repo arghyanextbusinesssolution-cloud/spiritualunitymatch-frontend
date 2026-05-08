@@ -112,7 +112,7 @@ export default function MyMatchesPage() {
           {/* Matches List */}
           {matches.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
-              <div className="text-6xl mb-4">💜</div>
+              <div className="text-6xl mb-4">✨</div>
               <h2 className="text-2xl font-bold text-spiritual-violet-700 mb-2">
                 No Matches Yet
               </h2>

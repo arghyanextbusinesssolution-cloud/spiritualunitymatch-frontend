@@ -138,7 +138,7 @@ export default function EventsPage() {
 
   return (
     <ResponsiveLayout userProfilePhoto={userProfilePhoto}>
-      <div className="max-w-5xl mx-auto px-6 py-10 md:px-10">
+      <div className="w-full overflow-x-hidden max-w-5xl mx-auto px-4 py-8 md:px-10 pb-28 md:pb-10">
         {/* Header Section */}
         <div className="flex items-center gap-6 mb-10">
           <button
@@ -158,15 +158,15 @@ export default function EventsPage() {
         </div>
 
         {/* Filter Section */}
-        <div className="flex gap-3 mb-12 overflow-x-auto pb-4 no-scrollbar">
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 no-scrollbar -mx-1 px-1">
           {['all', 'upcoming', 'registered', 'closed'].map(f => {
             const isActive = filter === f;
             return (
               <button
                 key={f}
                 onClick={() => setFilter(f as any)}
-                className={`px-8 py-3.5 rounded-2xl whitespace-nowrap text-[15px] font-bold transition-all duration-300 border shadow-sm ${isActive
-                    ? 'bg-white/80 text-[#8b5cf6] border-white/60 shadow-purple-100 scale-[1.05]'
+                className={`px-5 py-2.5 rounded-2xl whitespace-nowrap text-[13px] font-bold transition-all duration-300 border shadow-sm flex-shrink-0 ${isActive
+                    ? 'bg-white/80 text-[#8b5cf6] border-white/60 shadow-purple-100 scale-[1.02]'
                     : 'bg-white/30 backdrop-blur-md text-gray-500 border-white/40 hover:bg-white/50 hover:text-gray-900'
                   }`}
               >
@@ -177,34 +177,34 @@ export default function EventsPage() {
         </div>
 
         {/* Events Layout */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {filteredEvents.length === 0 ? (
-            <div className="bg-white/40 backdrop-blur-2xl rounded-[48px] border border-white/60 p-8 md:p-20 text-center flex flex-col items-center justify-center space-y-8 shadow-2xl mx-4 md:mx-0">
+            <div className="bg-white/40 backdrop-blur-2xl rounded-[36px] border border-white/60 p-8 text-center flex flex-col items-center justify-center space-y-6 shadow-2xl w-full">
               <div className="relative">
-                <div className="w-28 h-28 bg-white/40 rounded-full flex items-center justify-center text-6xl shadow-inner animate-float">
+                <div className="w-24 h-24 bg-white/40 rounded-full flex items-center justify-center text-5xl shadow-inner">
                   🕯️
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#8b5cf6] rounded-full flex items-center justify-center text-white shadow-lg animate-bounce">
+                <div className="absolute -bottom-2 -right-2 w-9 h-9 bg-[#8b5cf6] rounded-full flex items-center justify-center text-white shadow-lg animate-bounce">
                   ✨
                 </div>
               </div>
-              <div>
-                <h2 className="text-3xl font-black text-gray-900 mb-3 tracking-tight">
+              <div className="w-full">
+                <h2 className="text-2xl font-black text-gray-900 mb-2 tracking-tight">
                   {filter === 'all' && 'Journey Together'}
                   {filter === 'upcoming' && 'Patience is a Virtue'}
                   {filter === 'registered' && 'The Universe Awaits'}
                   {filter === 'closed' && 'Past Wisdom'}
                 </h2>
-                <p className="text-gray-600 font-bold max-w-sm mx-auto leading-relaxed opacity-70">
-                  {filter === 'all' && 'No spiritual gatherings in this realm yet. The stars are aligning!'}
+                <p className="text-gray-600 font-semibold text-sm leading-relaxed opacity-70 px-2">
+                  {filter === 'all' && 'No spiritual gatherings yet. The stars are aligning!'}
                   {filter === 'upcoming' && 'We are preparing new soul-enriching experiences for you.'}
-                  {filter === 'registered' && 'You haven\'t joined any events yet. Your path begins here.'}
+                  {filter === 'registered' && "You haven't joined any events yet. Your path begins here."}
                   {filter === 'closed' && 'No past wisdom to reflect upon at this gathering.'}
                 </p>
               </div>
               <button
                 onClick={() => setFilter('all')}
-                className="w-full md:w-auto bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white px-6 md:px-10 py-4 rounded-full font-black text-[11px] md:text-sm uppercase tracking-widest shadow-xl hover:shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all"
+                className="w-full bg-gradient-to-r from-[#8b5cf6] to-[#3b82f6] text-white py-4 rounded-full font-black text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all"
               >
                 Browse All Events
               </button>
@@ -216,7 +216,7 @@ export default function EventsPage() {
                 const isRegistered = isUserRegistered(evt._id);
 
                 return (
-                  <div key={evt._id} className="bg-white/40 backdrop-blur-xl rounded-[40px] border border-white/70 p-7 flex flex-col md:flex-row gap-8 relative hover:shadow-2xl hover:bg-white/50 transition-all duration-500 group shadow-lg">
+                  <div key={evt._id} className="bg-white/40 backdrop-blur-xl rounded-[32px] border border-white/70 p-5 md:p-7 flex flex-col md:flex-row gap-5 md:gap-8 relative hover:shadow-2xl hover:bg-white/50 transition-all duration-500 group shadow-lg w-full overflow-hidden">
                     {/* Status Badges */}
                     <div className="absolute top-7 right-7 flex gap-3 z-10">
                       {isRegistered && (
@@ -232,13 +232,12 @@ export default function EventsPage() {
                     </div>
 
                     {/* Image Area */}
-                    <div className="w-full md:w-64 h-56 md:h-44 rounded-[32px] overflow-hidden flex-shrink-0 border-[6px] border-white/40 shadow-xl group-hover:scale-[1.03] transition-transform duration-700 ease-out">
+                    <div className="w-full md:w-64 h-44 md:h-44 rounded-[24px] overflow-hidden flex-shrink-0 border-4 border-white/40 shadow-xl">
                       {evt.image ? (
-                        <img src={evt.image} alt={evt.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+                        <img src={evt.image} alt={evt.title} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-100/50 to-blue-50/50 flex items-center justify-center relative">
-                          <span className="text-6xl drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-500">🌌</span>
-                          <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-colors" />
+                        <div className="w-full h-full bg-gradient-to-br from-purple-100/50 to-blue-50/50 flex items-center justify-center">
+                          <span className="text-5xl">🌌</span>
                         </div>
                       )}
                     </div>
