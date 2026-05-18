@@ -9,8 +9,7 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  // Only use export mode for production builds on Hostinger
-  // Remove this for local development to enable dynamic features
+  // Maintain the user's original export configuration for production
   ...(process.env.NODE_ENV === 'production' && {
     output: "export",
     trailingSlash: true,

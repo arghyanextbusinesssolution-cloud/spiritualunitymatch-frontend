@@ -1,82 +1,77 @@
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
+/* ─── Environment ──────────────────────────────────────────────────────────── */
+const isDev = process.env.NODE_ENV === "development";
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (isDev ? "http://localhost:5000/api" : "");
 
+/* ─── Dev-only logger ─────────────────────────────────────────────────────── */
+const log = isDev
+  ? (label: string, data?: unknown) => console.log(label, data ?? "")
+  : () => {};
 
-import axios from 'axios';
-import Cookies from 'js-cookie';
+const logError = isDev
+  ? (label: string, data?: unknown) => console.error(label, data ?? "")
+  : () => {};
 
-// API client configuration
-// This is like a helper that talks to our backend server
-const API_URL = process.env.NEXT_PUBLIC_API_URL || (process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '');
-
-console.log('🌐 [API] Initializing with URL:', API_URL);
-console.log('🌐 [API] Environment:', process.env.NODE_ENV);
-console.log('🌐 [API] Public API URL env:', process.env.NEXT_PUBLIC_API_URL || 'Not Set (using fallback)');
-
-
+/* ─── Axios Instance ──────────────────────────────────────────────────────── */
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true, // Important for cookies
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+  timeout: 30_000, // 30 s global timeout
 });
 
-// Add token to requests if available
+/* ─── Request Interceptor ─────────────────────────────────────────────────── */
 api.interceptors.request.use((config) => {
-  // Try to get token from localStorage first (backup), then cookie
-  const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  const cookieToken = Cookies.get('token');
+  const storedToken =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const cookieToken = Cookies.get("token");
   const token = storedToken || cookieToken;
-  
-  // Log all requests to Render backend for debugging
-  console.log('📤 [API Request]', {
+
+  log("📤 [API]", {
     method: config.method?.toUpperCase(),
-    url: config.url,
-    baseURL: config.baseURL,
-    fullURL: `${config.baseURL}${config.url}`,
-    hasToken: !!token
+    url: `${config.baseURL}${config.url}`,
+    auth: !!token,
   });
-  
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  
+
   return config;
 });
 
-// Handle errors globally
+/* ─── Response Interceptor ────────────────────────────────────────────────── */
 api.interceptors.response.use(
-  (response) => {
-    console.log('📥 [API Response]', {
-      url: response.config.url,
-      status: response.status,
-      success: response.data.success
-    });
+  (response: AxiosResponse) => {
+    log("📥 [API]", { url: response.config.url, status: response.status });
     return response;
   },
   (error) => {
-    console.error('❌ [API Error]', {
-      url: error.config?.url,
-      baseURL: error.config?.baseURL,
-      fullURL: `${error.config?.baseURL}${error.config?.url}`,
+    logError("❌ [API]", {
+      url: `${error.config?.baseURL}${error.config?.url}`,
       status: error.response?.status,
       message: error.message,
-      code: error.code
+      code: error.code,
     });
-    
+
     if (error.response?.status === 401) {
-      console.log('🔒 [API] 401 Unauthorized - clearing tokens');
-      // Unauthorized - clear all tokens and redirect to login
-      Cookies.remove('token');
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        window.location.href = '/auth/login';
+      Cookies.remove("token");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        // Avoid redirect loop on login page
+        if (!window.location.pathname.startsWith("/auth")) {
+          window.location.href = "/auth/login";
+        }
       }
     }
+
     return Promise.reject(error);
   }
 );
 
 export default api;
-

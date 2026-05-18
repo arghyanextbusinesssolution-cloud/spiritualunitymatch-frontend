@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLoading } from '@/contexts/LoadingContext';
 import api from '@/lib/api';
 import {
     LayoutDashboard,
@@ -34,6 +35,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const router = useRouter();
     const pathname = usePathname();
     const { user, loading: authLoading } = useAuth();
+    const { startLoading } = useLoading();
 
     useEffect(() => {
         if (!authLoading) {
@@ -44,6 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }, [user, authLoading, router]);
 
     const handleLogout = async () => {
+        startLoading();
         try {
             await api.post('/auth/logout');
         } catch { }
@@ -80,6 +83,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Link
                                 key={href}
                                 href={href}
+                                onClick={(e) => {
+                                    if (pathname !== href) {
+                                        e.preventDefault();
+                                        startLoading();
+                                        setTimeout(() => {
+                                            router.push(href);
+                                        }, 100);
+                                    }
+                                }}
                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
                                     ? 'bg-spiritual-violet-600 text-white'
                                     : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white'

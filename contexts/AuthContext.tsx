@@ -17,7 +17,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User> => {
     console.log('🔐 [FRONTEND] Attempting login for:', email);
     
     try {
@@ -114,6 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         setUser(response.data.user);
         console.log('✅ [FRONTEND] User state updated:', response.data.user.email);
+        return response.data.user;
       } else {
         throw new Error('Login failed: No token received');
       }

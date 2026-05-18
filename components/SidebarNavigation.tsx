@@ -88,9 +88,12 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
     return (
         <aside className="hidden md:flex flex-col w-64 h-screen fixed top-0 left-0 bg-white/40 backdrop-blur-xl border-r border-white/20 z-50">
             <div className="flex flex-col h-full px-6 py-8">
-                <div className="mb-10 px-2 font-bold text-xl tracking-tight flex items-center gap-1">
-                    <span className="text-gray-900">spiritualunity</span>
-                    <span className="text-[#8b5cf6]">match</span>
+                <div className="mb-10 px-2 flex justify-start items-center">
+                    <img 
+                        src="/logo.webp" 
+                        alt="Spiritual Unity Logo" 
+                        className="h-12 object-contain"
+                    />
                 </div>
 
                 <nav className="flex-1 space-y-1">
@@ -122,7 +125,9 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
                                         }
                                         hideUpgradeModal();
                                         startLoading();
-                                        router.push(item.href);
+                                        setTimeout(() => {
+                                            router.push(item.href);
+                                        }, 100);
                                     }
                                 }}
                                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-300 group ${active

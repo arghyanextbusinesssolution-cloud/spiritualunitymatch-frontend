@@ -100,6 +100,11 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
                 e.preventDefault();
                 showUpgradeModal();
               } else {
+                if (pathname === item.href) {
+                  e.preventDefault();
+                  return;
+                }
+
                 const isSecure = (item.label === 'Messages' || item.label === 'Likes');
                 if (isSecure) {
                   console.log(`[BottomNav] Access to ${item.label} GRANTED. User role: ${user?.role}. Navigating to ${item.href}.`);
@@ -108,7 +113,9 @@ export default function BottomNavigation({ userProfilePhoto }: BottomNavigationP
                 }
                 startLoading(); // Trigger global loader
                 hideUpgradeModal();
-                router.push(item.href);
+                setTimeout(() => {
+                  router.push(item.href);
+                }, 100);
               }
             };
 

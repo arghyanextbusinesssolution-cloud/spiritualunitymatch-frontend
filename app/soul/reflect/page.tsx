@@ -47,11 +47,21 @@ export default function ReflectPage() {
   const handleSave = async () => {
     if (!entry.trim()) return;
     setSaving(true);
-    // Simulate save (replace with real API call if journal endpoint exists)
-    await new Promise(r => setTimeout(r, 800));
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    try {
+      await api.post('/soul/journal', {
+        title: selectedPrompt,
+        content: entry,
+        type: 'prompted',
+        prompt: selectedPrompt
+      });
+      setSaved(true);
+      setEntry('');
+      setTimeout(() => setSaved(false), 3000);
+    } catch (error) {
+      console.error('Error saving journal entry:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (authLoading || !user) return null;

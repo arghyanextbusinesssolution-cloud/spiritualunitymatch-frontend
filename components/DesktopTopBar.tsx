@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,7 +11,6 @@ interface DesktopTopBarProps {
 }
 
 export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) {
-    const [searchQuery, setSearchQuery] = useState('');
     const router = useRouter();
     const { user } = useAuth();
     const { startLoading } = useLoading();
@@ -21,21 +19,6 @@ export default function DesktopTopBar({ userProfilePhoto }: DesktopTopBarProps) 
 
     return (
         <header className="hidden md:flex items-center justify-between px-8 py-4 bg-white/20 backdrop-blur-md sticky top-0 z-40 border-b border-white/10">
-            {/* Search Bar */}
-            <div className="flex-1 max-w-lg relative group">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#8b5cf6] transition-colors">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-                <input
-                    type="text"
-                    placeholder="Search People"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white/60 backdrop-blur-sm border border-transparent focus:border-[#8b5cf6]/30 focus:bg-white/90 rounded-2xl py-2.5 pl-12 pr-4 text-sm text-gray-800 placeholder-gray-400 outline-none transition-all shadow-sm"
-                />
-            </div>
 
             {/* Icons Section */}
             <div className="flex items-center gap-5 ml-auto">

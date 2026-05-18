@@ -95,7 +95,7 @@ export default function DashboardPage() {
               <h2 className="text-xl font-bold text-gray-800 mb-2">Choose Your Plan</h2>
               <p className="text-gray-600 mb-4 text-sm">Select a membership plan to unlock all features</p>
               <LoadingLink
-                href="/plans"
+                href="/subscription"
                 className="block text-center bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-full font-semibold"
               >
                 View Plans

@@ -112,7 +112,10 @@ export default function SuggestedMatchesPage() {
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        showUpgradeModal();
+        showToast('Access restricted. Redirecting to upgrade...', 'error');
+        setTimeout(() => {
+          router.push('/plans');
+        }, 1500);
       }
     } finally {
       setLoading(false);
@@ -182,8 +185,10 @@ export default function SuggestedMatchesPage() {
       }
     } catch (error: any) {
       if (error.response?.data?.requiresUpgrade) {
-        showUpgradeModal();
-        showToast(error.response.data.message || 'Limit reached. Upgrade to send more likes.', 'error');
+        showToast(error.response.data.message || 'Daily limit reached. Redirecting to upgrade...', 'error');
+        setTimeout(() => {
+          router.push('/plans');
+        }, 1500);
       } else {
         showToast(error.response?.data?.message || 'Error liking user', 'error');
       }
@@ -205,7 +210,14 @@ export default function SuggestedMatchesPage() {
       }
     } catch (error: any) {
       console.error('Reject error:', error);
-      showToast(error.response?.data?.message || 'Error rejecting user', 'error');
+      if (error.response?.data?.requiresUpgrade) {
+        showToast(error.response.data.message || 'Daily limit reached. Redirecting to upgrade...', 'error');
+        setTimeout(() => {
+          router.push('/plans');
+        }, 1500);
+      } else {
+        showToast(error.response?.data?.message || 'Error rejecting user', 'error');
+      }
     } finally {
       setIsRejecting(false);
     }

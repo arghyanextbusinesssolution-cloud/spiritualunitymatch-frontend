@@ -131,8 +131,7 @@ export default function ProfilePage() {
 
   const menuItems = [
     { label: 'Events', icon: '📅', href: '/events' },
-    { label: 'Subscription', icon: '💳', href: '/plans' },
-    { label: 'Restore Subscription', icon: '↩️', href: '/subscription' },
+    { label: 'Subscription', icon: '💳', href: '/subscription' },
     { label: 'Terms of use', icon: '📋', href: '#terms' },
     { label: 'Privacy policy', icon: '🔒', href: '#privacy' },
     { label: 'Rate app', icon: '⭐', href: '#rate' },

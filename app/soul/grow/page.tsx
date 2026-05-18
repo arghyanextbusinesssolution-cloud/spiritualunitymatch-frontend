@@ -53,13 +53,24 @@ export default function GrowPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [userProfilePhoto, setUserProfilePhoto] = useState<string | null>(null);
+  const [readiness, setReadiness] = useState<any>(null);
   const [activeStage, setActiveStage] = useState<string | null>(null);
   const [completedRituals, setCompletedRituals] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!authLoading && !user) { router.push('/auth/login'); return; }
-    if (user) fetchProfile();
+    if (user) {
+      fetchProfile();
+      fetchReadiness();
+    }
   }, [user, authLoading, router]);
+
+  const fetchReadiness = async () => {
+    try {
+      const res = await api.get('/soul/readiness');
+      if (res.data.success) setReadiness(res.data.readiness);
+    } catch {}
+  };
 
   const fetchProfile = async () => {
     try {
@@ -81,8 +92,15 @@ export default function GrowPage() {
 
   if (authLoading || !user) return null;
 
-  const completedCount = READINESS_STAGES.filter(s => s.completed).length;
-  const progressPct = (completedCount / READINESS_STAGES.length) * 100;
+  const getStageStatus = (stageId: string, index: number) => {
+    if (!readiness) return false;
+    const stages = READINESS_STAGES.map(s => s.id);
+    const currentIdx = stages.indexOf(readiness.stage);
+    return index < currentIdx || (index === currentIdx && readiness.currentStageProgress === 100);
+  };
+
+  const completedCount = READINESS_STAGES.filter((s, i) => getStageStatus(s.id, i)).length;
+  const progressPct = readiness ? readiness.currentStageProgress : 0; // Or calculate based on stages completed
 
   return (
     <ResponsiveLayout userProfilePhoto={userProfilePhoto}>
@@ -146,7 +164,7 @@ export default function GrowPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-black text-gray-900 text-sm truncate">{stage.title}</span>
-                        {stage.completed && (
+                        {getStageStatus(stage.id, i) && (
                           <span className="text-[8px] font-black uppercase tracking-widest bg-green-500/10 text-green-600 border border-green-500/20 px-2 py-0.5 rounded-full flex-shrink-0">
                             ✓ Done
                           </span>
