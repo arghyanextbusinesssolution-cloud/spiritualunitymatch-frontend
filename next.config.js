@@ -9,12 +9,6 @@ const nextConfig = {
     unoptimized: true,
   },
 
-  // Maintain the user's original export configuration for production
-  ...(process.env.NODE_ENV === 'production' && {
-    output: "export",
-    trailingSlash: true,
-  }),
-
   webpack: (config) => {
     config.resolve.alias["@"] = path.resolve(__dirname);
     return config;
