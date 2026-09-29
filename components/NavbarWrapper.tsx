@@ -10,20 +10,21 @@ export default function NavbarWrapper() {
   const navItems = [
     { name: 'Home', link: '/' },
     { name: 'About Us', link: '/about' },
+    { name: 'Features', link: '/features' },
+    { name: 'Pricing', link: '/pricing' },
     { name: 'How It Works', link: '/how-it-works' },
-    { name: 'Pricing', link: '/plans' },
     { name: 'Contact Us', link: '/contact' },
   ];
 
   return (
     <Navbar className="z-50">
       <NavBody>
-        <SpiritualUnityLogo />
+        <SpiritualUnityLogo width={200} height={56} />
         <NavItems items={navItems} />
       </NavBody>
       <MobileNav>
         <MobileNavHeader>
-          <SpiritualUnityLogo />
+          <SpiritualUnityLogo width={160} height={46} />
           <MobileNavToggle isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
         </MobileNavHeader>
         <MobileNavMenu isOpen={isOpen} onClose={() => setIsOpen(false)}>

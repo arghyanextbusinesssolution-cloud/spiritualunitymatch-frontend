@@ -92,11 +92,9 @@ export default function ContactPage() {
   ];
 
   const socialLinks = [
-    { name: 'Facebook', icon: '📘', url: '#' },
-    { name: 'Instagram', icon: '📷', url: '#' },
+    { name: 'Facebook', icon: '📘', url: 'https://www.facebook.com/share/1BozCxJHf4/' },
+    { name: 'Instagram', icon: '📷', url: 'https://www.instagram.com/spiritualunitymatch?stkn=bnc2NnU5NzV6bGtw' },
     { name: 'Twitter', icon: '🐦', url: '#' },
-    { name: 'LinkedIn', icon: '💼', url: '#' },
-    { name: 'YouTube', icon: '📺', url: '#' }
   ];
 
   return (

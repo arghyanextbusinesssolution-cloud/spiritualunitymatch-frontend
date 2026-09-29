@@ -11,9 +11,9 @@ export default function DefaultNavbar() {
 
     const navItems = [
         { name: 'Home', link: '/' },
-        { name: 'About Us', link: '#about' }, // Assuming it scrolls to an ID
-        { name: 'Features', link: '#features' },
-        { name: 'Pricing', link: '/plans' },
+        { name: 'About Us', link: '/about' },
+        { name: 'Features', link: '/features' },
+        { name: 'Pricing', link: '/pricing' },
     ];
 
     return (
@@ -23,7 +23,7 @@ export default function DefaultNavbar() {
 
                     {/* Logo Section */}
                     <div className="flex flex-shrink-0 items-center">
-                        <SpiritualUnityLogo />
+                        <SpiritualUnityLogo width={200} height={56} />
                     </div>
 
                     {/* Desktop Navigation */}

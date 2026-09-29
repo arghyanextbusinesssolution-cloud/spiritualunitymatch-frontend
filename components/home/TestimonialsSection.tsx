@@ -9,28 +9,28 @@ const testimonials = [
       "Spiritual Unity Match helped me find someone who truly understands my spiritual journey. We've been together 8 months and it's been the most aligned relationship I've ever experienced.",
     name: "Sarah & Michael",
     designation: "Conscious Couple · California",
-    src: "https://images.unsplash.com/photo-1516589174184-c685266e430c?q=80&w=800&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=800&auto=format&fit=crop",
   },
   {
     quote:
       "The matching algorithm is incredible! It connected me with someone who shares my meditation practice and yoga philosophy. We met and instantly knew we were meant to be together.",
     name: "Emma & David",
     designation: "Spiritual Partners · New York",
-    src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=800&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop",
   },
   {
     quote:
       "After years of superficial dating, I finally found depth and meaning. Spiritual Unity Match brought us together based on our shared values and spiritual beliefs. Grateful every day!",
     name: "Lisa & James",
     designation: "Soul Mates · Texas",
-    src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop",
   },
   {
     quote:
       "The platform creates such a safe space for authentic connections. We bonded over our spiritual practices and now we're building a conscious life together.",
     name: "Maria & Alex",
     designation: "Mindful Partners · Florida",
-    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=800&auto=format&fit=crop",
+    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
   },
 ];
 

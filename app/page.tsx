@@ -31,6 +31,10 @@ const TestimonialsSection = dynamic(
   () => import("@/components/home/TestimonialsSection"),
   { loading: () => <SectionSkeleton />, ssr: false }
 );
+const MembersOnlineSection = dynamic(
+  () => import("@/components/home/MembersOnlineSection"),
+  { loading: () => <SectionSkeleton />, ssr: false }
+);
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <SectionSkeleton height="h-64" />,
   ssr: false,
@@ -111,6 +115,7 @@ export default function HomePage() {
         <HowItWorksSection />
         <PricingPreviewSection />
         <TestimonialsSection />
+        <MembersOnlineSection />
         <CTASection />
       </main>
 

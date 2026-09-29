@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { useLoading } from '@/contexts/LoadingContext';
+import { SpiritualUnityLogo } from './SpiritualUnityLogo';
 
 interface SidebarNavigationProps {
     userProfilePhoto?: string | null;
@@ -89,11 +90,7 @@ export default function SidebarNavigation({ userProfilePhoto }: SidebarNavigatio
         <aside className="hidden md:flex flex-col w-64 h-screen fixed top-0 left-0 bg-white/40 backdrop-blur-xl border-r border-white/20 z-50">
             <div className="flex flex-col h-full px-6 py-8">
                 <div className="mb-10 px-2 flex justify-start items-center">
-                    <img 
-                        src="/logo.webp" 
-                        alt="Spiritual Unity Logo" 
-                        className="h-12 object-contain"
-                    />
+                    <SpiritualUnityLogo width={190} height={52} />
                 </div>
 
                 <nav className="flex-1 space-y-1">

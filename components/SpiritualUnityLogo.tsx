@@ -5,24 +5,34 @@ interface SpiritualUnityLogoProps {
   className?: string;
   width?: number;
   height?: number;
+  showText?: boolean;
 }
 
-export const SpiritualUnityLogo = ({ className = "", width = 40, height = 40 }: SpiritualUnityLogoProps) => {
+export const SpiritualUnityLogo = ({
+  className = "",
+  width = 180,
+  height = 52,
+  showText = false,
+}: SpiritualUnityLogoProps) => {
   return (
     <LoadingLink
       href="/"
-      className={`relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 ${className}`}
+      className={`relative z-20 flex items-center space-x-2 transition-opacity hover:opacity-90 ${className}`}
     >
-      <div className="relative" style={{ width, height }}>
+      <div className="relative flex items-center" style={{ width, height }}>
         <Image
-          src="https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp"
+          src="/logo2.png"
           alt="Spiritual Unity Logo"
           fill
-          className="object-contain"
+          className="object-contain object-left"
           priority
         />
       </div>
-      {/* <span className="font-medium text-black dark:text-white">Spiritual Unity Match</span> */}
+      {showText && (
+        <span className="font-bold text-gray-800 dark:text-white text-lg tracking-tight">
+          Spiritual Unity Match
+        </span>
+      )}
     </LoadingLink>
   );
-};
+};

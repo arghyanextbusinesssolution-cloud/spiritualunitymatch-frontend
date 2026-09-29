@@ -6,8 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLoading } from "@/contexts/LoadingContext";
 
-const LOGO =
-  "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp";
+const LOGO = "/logo2.png";
 
 export default function HeroSection() {
   const { startLoading } = useLoading();

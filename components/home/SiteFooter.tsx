@@ -2,66 +2,86 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MessageSquare, Twitter, Facebook, Instagram } from "lucide-react";
+import { Facebook, Instagram, Sparkles } from "lucide-react";
 
-const LOGO = "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp";
+const LOGO = "/logo2.png";
 
 const productLinks = [
-  { label: "Pricing", href: "/plans" },
+  { label: "Features", href: "/features" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Sign In", href: "/auth/login" },
-  { label: "Documentation", href: "#" },
 ];
 
 const companyLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Blog", href: "#" },
-  { label: "Careers", href: "#" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 const legalLinks = [
-  { label: "Terms & Conditions", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-  { label: "Sitemap", href: "#" },
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Privacy Policy", href: "/privacy" },
 ];
 
 export default function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative text-white overflow-hidden">
-      {/* ── Red to Pink Gradient Background ── */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          background: "linear-gradient(to right, #ff1a1a 0%, #ff8080 50%, #ffcccc 100%)",
-        }}
-      />
+    <footer className="bg-gradient-to-b from-[#0b0518] via-[#090414] to-[#040108] text-white relative overflow-hidden border-t border-purple-500/20">
+      {/* Top glowing gradient line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-purple-500 via-pink-500 to-transparent" />
 
-      <div className="section-inner relative z-10 py-16 lg:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8">
-          
+
           {/* Logo & Tagline Column */}
           <div className="md:col-span-4 flex flex-col items-start">
-            <div className="flex items-center gap-3 mb-6">
-              {/* Using a double bubble icon to match the image's logo style */}
-              <div className="relative flex items-center justify-center">
-                <MessageSquare className="w-10 h-10 fill-white text-white opacity-90" />
-                <MessageSquare className="w-8 h-8 fill-white text-white absolute -right-2 -top-1 border-2 border-[#ff1a1a] rounded-lg" />
+            <div className="mb-6 bg-white/95 backdrop-blur-md px-4 py-2 rounded-2xl shadow-xl border border-white/20 inline-block hover:scale-[1.02] transition-transform">
+              <div className="relative w-[190px] h-[50px]">
+                <Image
+                  src={LOGO}
+                  alt="Spiritual Unity Match Logo"
+                  fill
+                  className="object-contain object-left"
+                  sizes="190px"
+                  priority
+                />
               </div>
             </div>
-            <p className="text-white font-medium text-sm sm:text-base leading-tight max-w-[240px]">
-              Talk, Connect, Fall in Love — Your Journey Starts Here
+            <p className="text-purple-200/70 font-medium text-sm leading-relaxed max-w-[280px] mb-6">
+              Talk, Connect, Fall in Love — Your Spiritual Journey Starts Here
             </p>
+
+            {/* Social Icons Row */}
+            <div className="flex items-center gap-3">
+              <a
+                href="https://www.facebook.com/share/1BozCxJHf4/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-xl bg-purple-900/40 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 border border-purple-500/30 flex items-center justify-center transition-all hover:scale-110 shadow-md"
+              >
+                <Facebook className="w-4 h-4 text-purple-200" />
+              </a>
+              <a
+                href="https://www.instagram.com/spiritualunitymatch?stkn=bnc2NnU5NzV6bGtw"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-10 h-10 rounded-xl bg-purple-900/40 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 border border-purple-500/30 flex items-center justify-center transition-all hover:scale-110 shadow-md"
+              >
+                <Instagram className="w-4 h-4 text-purple-200" />
+              </a>
+            </div>
           </div>
 
           {/* Links Columns */}
           <div className="md:col-span-2">
-            <h4 className="text-sm font-bold mb-6 text-white tracking-wide">Product</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xs font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 tracking-widest uppercase">Product</h4>
+            <ul className="space-y-3.5">
               {productLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-white/80 hover:text-white text-sm transition-colors font-medium">
+                  <Link href={href} className="text-purple-200/70 hover:text-pink-300 text-sm transition-colors font-medium">
                     {label}
                   </Link>
                 </li>
@@ -70,11 +90,11 @@ export default function SiteFooter() {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-sm font-bold mb-6 text-white tracking-wide">Company</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xs font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 tracking-widest uppercase">Company</h4>
+            <ul className="space-y-3.5">
               {companyLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-white/80 hover:text-white text-sm transition-colors font-medium">
+                  <Link href={href} className="text-purple-200/70 hover:text-pink-300 text-sm transition-colors font-medium">
                     {label}
                   </Link>
                 </li>
@@ -83,11 +103,11 @@ export default function SiteFooter() {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="text-sm font-bold mb-6 text-white tracking-wide">Legal</h4>
-            <ul className="space-y-4">
+            <h4 className="text-xs font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 tracking-widest uppercase">Legal</h4>
+            <ul className="space-y-3.5">
               {legalLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <Link href={href} className="text-white/80 hover:text-white text-sm transition-colors font-medium">
+                  <Link href={href} className="text-purple-200/70 hover:text-pink-300 text-sm transition-colors font-medium">
                     {label}
                   </Link>
                 </li>
@@ -95,27 +115,28 @@ export default function SiteFooter() {
             </ul>
           </div>
 
-          {/* Social Icons Column (Stacked Right) */}
-          <div className="md:col-span-2 flex flex-col md:items-end gap-6 pt-2">
-            <Link href="#" className="text-white/90 hover:text-white transition-transform hover:scale-110">
-              <Twitter className="w-5 h-5 fill-white" />
-            </Link>
-            <Link href="#" className="text-white/90 hover:text-white transition-transform hover:scale-110">
-              <Facebook className="w-5 h-5 fill-white" />
-            </Link>
-            <Link href="#" className="text-white/90 hover:text-white transition-transform hover:scale-110">
-              <Instagram className="w-5 h-5" />
+          {/* Stay Connected Column */}
+          <div className="md:col-span-2">
+            <h4 className="text-xs font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 tracking-widest uppercase">Stay Connected</h4>
+            <p className="text-purple-200/60 text-sm mb-5 leading-relaxed">
+              Get spiritual insights & community updates.
+            </p>
+            <Link
+              href="/auth/register"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold uppercase tracking-wider px-5 py-3 rounded-full transition-all hover:from-purple-500 hover:to-pink-500 hover:scale-105 shadow-lg shadow-purple-900/50 border border-white/10"
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Join Free
             </Link>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] sm:text-xs font-medium tracking-wide uppercase">
-          <p className="text-white/70">
-            © Copyright {year}. All Rights Reserved by Aditama
+        <div className="mt-16 pt-8 border-t border-purple-500/15 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] sm:text-xs font-medium tracking-wide uppercase">
+          <p className="text-purple-300/50">
+            © Copyright {year}. All Rights Reserved by Spiritual Unity Match
           </p>
-          <p className="text-white/60">
-            Designed with ✨ for Spiritual Unity Match
+          <p className="text-purple-300/60 flex items-center gap-1">
+            Designed with <Sparkles className="w-3.5 h-3.5 text-pink-400" /> for Spiritual Unity Match
           </p>
         </div>
       </div>
