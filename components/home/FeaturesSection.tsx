@@ -7,7 +7,7 @@ const features = [
     icon: "🧘",
     title: "Spiritual Matching",
     description:
-      "Advanced algorithm matches based on spiritual beliefs, practices, and life intentions for genuine soul-level compatibility.",
+      "Discover people who share an interest in spirituality, self-awareness, personal growth, and deeper relationships.",
     color: "from-red-500 to-rose-600",
     bg: "from-red-50 to-rose-50",
   },
@@ -15,7 +15,7 @@ const features = [
     icon: "💬",
     title: "Meaningful Conversations",
     description:
-      "Connect with people who share your values and spiritual journey through thoughtful, intentional messaging.",
+      "Move beyond simple introductions and create conversations that help you understand each other's values and intentions.",
     color: "from-pink-500 to-rose-600",
     bg: "from-pink-50 to-rose-50",
   },
@@ -23,7 +23,7 @@ const features = [
     icon: "✨",
     title: "Conscious Relationships",
     description:
-      "Build relationships based on depth, intention, and spiritual alignment — not just physical attraction.",
+      "Build relationships around respect, honesty, emotional awareness, communication, and shared growth.",
     color: "from-rose-500 to-red-600",
     bg: "from-rose-50 to-red-50",
   },
@@ -31,7 +31,7 @@ const features = [
     icon: "🔒",
     title: "Safe & Verified",
     description:
-      "Verified profiles, privacy controls, and a respectful community you can trust.",
+      "Connect in a dating environment where authenticity and respectful interactions are an important part of the experience.",
     color: "from-emerald-500 to-teal-600",
     bg: "from-emerald-50 to-teal-50",
   },
@@ -39,7 +39,7 @@ const features = [
     icon: "🌱",
     title: "Growth-Oriented",
     description:
-      "Soul check-ins, reflection tools, and features to support your personal and spiritual growth.",
+      "Meet people who believe that personal growth and self-awareness can create stronger relationships.",
     color: "from-green-500 to-emerald-600",
     bg: "from-green-50 to-emerald-50",
   },
@@ -47,7 +47,7 @@ const features = [
     icon: "🌟",
     title: "Authentic Profiles",
     description:
-      "Comprehensive profiles that reflect your true self, values, and conscious intentions.",
+      "Show who you really are, what matters to you, and what you hope to find in a relationship.",
     color: "from-amber-500 to-orange-600",
     bg: "from-amber-50 to-orange-50",
   },
@@ -83,7 +83,7 @@ export default function FeaturesSection() {
           transition={{ duration: 0.7 }}
         >
           <span className="inline-block bg-brand-gradient-light text-brand font-semibold text-sm px-4 py-1.5 rounded-full mb-4 tracking-wider uppercase">
-            Features
+            Why Choose Us
           </span>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-5"
@@ -92,8 +92,10 @@ export default function FeaturesSection() {
             Why Choose Spiritual Unity Match?
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Discover the features that make conscious dating meaningful and
-            transformative.
+            Because meaningful love starts with meaningful connection. There is a difference between meeting someone and truly connecting with someone.
+          </p>
+          <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed mt-3">
+            As a <strong className="text-gray-700 font-semibold">spiritual dating site in New York</strong>, our goal is to create an environment where people can connect around more than appearances.
           </p>
         </motion.div>
 

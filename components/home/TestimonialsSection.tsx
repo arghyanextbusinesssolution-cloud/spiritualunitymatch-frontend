@@ -13,9 +13,9 @@ const testimonials = [
   },
   {
     quote:
-      "The matching algorithm is incredible! It connected me with someone who shares my meditation practice and yoga philosophy. We met and instantly knew we were meant to be together.",
+      "I wasn't looking for another dating app. I wanted to meet someone who understood my values and my approach to relationships. The experience helped me have more meaningful conversations and connect with someone who shares my outlook.",
     name: "Emma & David",
-    designation: "Spiritual Partners · New York",
+    designation: "Spiritual Unity Match Members · New York",
     src: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=800&auto=format&fit=crop",
   },
   {
@@ -60,7 +60,7 @@ export default function TestimonialsSection() {
             What Our Conscious Couples Say
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Real stories from spiritual souls who found meaningful connections.
+            Real connection begins when two people feel understood, respected, and accepted for who they are.
           </p>
         </motion.div>
 

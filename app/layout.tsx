@@ -32,18 +32,29 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://spiritualunitymatch.com"
   ),
   title: {
-    default: "Spiritual Unity Match – Find Alignment Before Attraction",
+    default: "Spiritual Dating Site in New York | Spiritual Unity Match",
     template: "%s | Spiritual Unity Match",
   },
   description:
-    "A conscious dating platform for spiritual souls seeking meaningful, aligned connections. Find depth, intention and spiritual harmony.",
+    "Join a spiritual dating site in New York for conscious singles seeking meaningful relationships, authentic connections, and soulmate matchmaking in New York.",
   keywords: [
+    "spiritual dating site in New York",
+    "soulmate matchmaking in New York",
     "spiritual dating",
-    "conscious relationships",
+    "conscious dating",
+    "conscious singles",
     "spiritual singles",
-    "mindful dating",
-    "soul connection",
-    "spiritual unity",
+    "meaningful relationships",
+    "meaningful connections",
+    "soulmate matchmaking",
+    "relationship compatibility",
+    "spiritual compatibility",
+    "intentional dating",
+    "personal growth",
+    "conscious relationships",
+    "authentic relationships",
+    "dating in New York",
+    "meaningful love",
   ],
   authors: [{ name: "Spiritual Unity Match" }],
   creator: "Next Business Solution",
@@ -52,9 +63,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Spiritual Unity Match – Find Alignment Before Attraction",
+    title: "Spiritual Dating Site in New York | Spiritual Unity Match",
     description:
-      "Connect with conscious souls who share your spiritual journey.",
+      "Join a spiritual dating site in New York for conscious singles seeking meaningful relationships and soulmate matchmaking.",
     siteName: "Spiritual Unity Match",
     images: [
       {
@@ -67,9 +78,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Spiritual Unity Match – Find Alignment Before Attraction",
+    title: "Spiritual Dating Site in New York | Spiritual Unity Match",
     description:
-      "Connect with conscious souls who share your spiritual journey.",
+      "Join a spiritual dating site in New York for conscious singles seeking meaningful relationships and soulmate matchmaking.",
     images: [
       "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp",
     ],

@@ -57,7 +57,7 @@ export default function HeroSection() {
 
             {/* Headline */}
             <h1
-              className="font-playfair text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.1] tracking-tight text-center lg:text-left"
+              className="font-playfair text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-[1.15] tracking-tight text-center lg:text-left"
               style={{ fontFamily: "var(--font-playfair), serif" }}
             >
               Find{" "}
@@ -89,12 +89,18 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            {/* Sub-headline */}
-            <p className="text-lg sm:text-xl text-gray-500 mb-10 max-w-xl leading-relaxed text-center lg:text-left">
-              Connect with souls who share your spiritual journey. Where{" "}
-              <em className="not-italic text-brand font-medium">depth</em> meets
-              intention, and conscious relationships begin.
-            </p>
+            {/* Sub-headline / Copy */}
+            <div className="space-y-4 text-base sm:text-lg text-gray-600 mb-8 max-w-xl leading-relaxed text-center lg:text-left">
+              <p>
+                Finding the right person is about more than attraction. It is about meeting someone who understands your values, respects your journey, and wants to build a meaningful relationship.
+              </p>
+              <p className="font-medium text-gray-700">
+                Spiritual Unity Match is a <strong className="text-gray-900 font-semibold">spiritual dating site in New York</strong> created for conscious singles who are looking for genuine connection, shared values, and relationships with purpose.
+              </p>
+              <p className="text-gray-500 text-sm sm:text-base">
+                Whether you are exploring spirituality, personal growth, mindfulness, or simply looking for someone who sees relationships differently, you can begin your journey here.
+              </p>
+            </div>
 
             {/* CTA Row */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
@@ -109,50 +115,34 @@ export default function HeroSection() {
               </Link>
 
               <Link
-                href="/plans"
+                href="#plans"
                 className="border-2 border-[#ff8080] text-[#ff1a1a] px-8 py-4 rounded-full font-semibold text-base sm:text-lg hover:bg-red-50 hover:border-[#ff1a1a] transition-all duration-300 text-center"
               >
                 View Plans
               </Link>
             </div>
 
-            {/* Social proof */}
-            <motion.p
-              className="text-sm text-gray-400 text-center lg:text-left"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              Already have an account?{" "}
-              <Link
-                href="/auth/login"
-                onClick={startLoading}
-                className="text-[#ff1a1a] font-semibold hover:underline underline-offset-2"
-              >
-                Sign In →
-              </Link>
-            </motion.p>
-
-            {/* Trust badges */}
+            {/* Tagline / Core Pillars Bar */}
             <motion.div
-              className="flex flex-wrap gap-4 mt-8 justify-center lg:justify-start"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3 text-xs sm:text-sm font-medium text-purple-900 bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 border border-purple-100 rounded-2xl px-4 py-3 shadow-xs"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
             >
-              {[
-                { icon: "🔒", label: "Verified Profiles" },
-                { icon: "💳", label: "No Card Required" },
-                { icon: "✨", label: "10k+ Connections" },
-              ].map(({ icon, label }) => (
-                <span
-                  key={label}
-                  className="flex items-center gap-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-100 shadow-sm rounded-full px-3 py-1.5"
-                >
-                  <span>{icon}</span>
-                  {label}
-                </span>
-              ))}
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                Conscious Connections
+              </span>
+              <span className="text-gray-300">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span>
+                Meaningful Conversations
+              </span>
+              <span className="text-gray-300">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                Authentic Relationships
+              </span>
             </motion.div>
           </motion.div>
 

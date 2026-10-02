@@ -11,24 +11,24 @@ const stats = [
 
 const highlights = [
   {
-    emoji: "🧘",
-    title: "Spiritual Focus",
-    body: "Connecting souls on aligned spiritual journeys.",
+    emoji: "✨",
+    title: "Spiritual Alignment",
+    body: "Meet people who value spirituality, mindfulness, personal development, and conscious living.",
   },
   {
-    emoji: "💝",
-    title: "Conscious Dating",
-    body: "Relationships built on shared values and intentions.",
+    emoji: "❤️",
+    title: "Meaningful Connection",
+    body: "Create conversations that allow you to understand someone's personality, beliefs, values, and relationship goals.",
   },
   {
-    emoji: "🌱",
+    emoji: "🌿",
     title: "Personal Growth",
-    body: "Tools that support your spiritual development.",
+    body: "Connect with people who believe that becoming a better version of yourself can strengthen the relationships you build.",
   },
   {
     emoji: "🔒",
-    title: "Safe Community",
-    body: "Verified profiles with strong privacy controls.",
+    title: "Safe & Authentic",
+    body: "Enjoy a community where genuine profiles, respectful communication, and authentic connections matter.",
   },
 ];
 
@@ -45,17 +45,16 @@ export default function AboutSection() {
           transition={{ duration: 0.7 }}
         >
           <span className="inline-block bg-brand-gradient-light text-brand font-semibold text-sm px-4 py-1.5 rounded-full mb-4 tracking-wider uppercase">
-            Our Mission
+            About Spiritual Unity Match
           </span>
           <h2
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-5"
             style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            About Spiritual Unity Match
+            Discover a More Meaningful Way to Find Love
           </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            A conscious dating platform designed for spiritual souls seeking
-            meaningful connections beyond the superficial.
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Love becomes more meaningful when two people connect beyond the surface.
           </p>
         </motion.div>
 
@@ -89,14 +88,21 @@ export default function AboutSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-gray-600 text-lg leading-relaxed mb-8">
-              Spiritual Unity Match prioritises{" "}
-              <strong className="text-gray-800">depth</strong>,{" "}
-              <strong className="text-gray-800">intention</strong>, and{" "}
-              <strong className="text-gray-800">spiritual alignment</strong>{" "}
-              over superficial connections. We believe the most profound
-              relationships begin with a shared path inward.
-            </p>
+            <div className="space-y-4 text-gray-600 text-base leading-relaxed mb-8">
+              <p>
+                <strong>Spiritual Unity Match</strong> is a <strong className="text-gray-900 font-semibold">spiritual dating site in New York</strong> designed for people who believe that lasting relationships begin with genuine understanding. Instead of focusing only on appearance or quick interactions, we encourage connections based on values, intentions, personal growth, and spiritual compatibility.
+              </p>
+              <p>
+                Our approach to <strong className="text-gray-900 font-semibold">soulmate matchmaking in New York</strong> is centered around helping people discover connections that feel authentic and purposeful.
+              </p>
+              <p>
+                You can create a profile that reflects who you really are, explore people who share your interests and values, and start conversations that go beyond ordinary small talk.
+              </p>
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-gray-900 mb-4 tracking-tight">Our Approach</h3>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {highlights.map(({ emoji, title, body }, i) => (

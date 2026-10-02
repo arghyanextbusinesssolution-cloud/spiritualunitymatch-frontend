@@ -133,11 +133,11 @@ export default function MembersOnlineSection() {
           </div>
 
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-4">
-            Members <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Online Now</span>
+            Meet People Who <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Share Your Values</span>
           </h2>
 
           <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Connect with conscious souls actively seeking authentic relationships right at this moment.
+            Connect with conscious singles who are looking for meaningful conversations, genuine compatibility, and relationships with purpose.
           </p>
         </motion.div>
 
@@ -229,11 +229,22 @@ export default function MembersOnlineSection() {
           transition={{ delay: 0.3 }}
           className="text-center"
         >
+          <div className="max-w-2xl mx-auto mb-8 space-y-3">
+            <p className="text-gray-600 text-base leading-relaxed">
+              Spiritual Unity Match brings a thoughtful approach to dating for people who want to connect on a deeper level.
+            </p>
+            <p className="text-gray-600 text-base leading-relaxed">
+              If you have been searching for a <strong className="text-gray-800 font-semibold">spiritual dating site in New York</strong> where your values can be part of the conversation, create your profile and begin discovering potential connections.
+            </p>
+            <p className="text-gray-500 text-sm italic">
+              Your next meaningful conversation could be the beginning of something special.
+            </p>
+          </div>
           <Link
             href="/auth/register"
             className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-full shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-105 active:scale-95 transition-all duration-300"
           >
-            Join to Connect
+            Join the Community
             <ArrowRight className="w-4 h-4" />
           </Link>
         </motion.div>

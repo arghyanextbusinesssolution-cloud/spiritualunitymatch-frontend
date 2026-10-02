@@ -10,9 +10,9 @@ const plans = [
     name: "Seeker",
     price: "$0",
     period: "forever",
-    description: "Begin your spiritual journey",
+    description: "Begin your journey and discover a different approach to online dating.",
     icon: "🌱",
-    features: ["Create your profile", "10 profile views / day", "Basic matching"],
+    features: ["Create your profile", "Explore the community", "Discover potential connections", "Begin your journey"],
     cta: "Get Started Free",
     popular: false,
     gradient: "from-gray-100 to-gray-200",
@@ -23,15 +23,15 @@ const plans = [
     name: "Awakened",
     price: "$19",
     period: "per month",
-    description: "Our most popular choice",
+    description: "Most Popular",
     icon: "✨",
     features: [
-      "Unlimited browsing",
-      "Full messaging access",
-      "See who liked you",
-      "Advanced filters",
+      "Everything in Seeker",
+      "Enhanced connection features",
+      "More ways to connect",
+      "Deeper relationship discovery",
     ],
-    cta: "Start 7-Day Trial",
+    cta: "Start Your Journey",
     popular: true,
     gradient: "from-red-600 to-rose-600",
     badge: "Most Popular",
@@ -41,15 +41,15 @@ const plans = [
     name: "Enlightened",
     price: "$39",
     period: "per month",
-    description: "Divine connection experience",
+    description: "For people ready to make meaningful connection a bigger part of their journey.",
     icon: "👑",
     features: [
-      "Priority placement",
-      "Soul compatibility score",
-      "Spiritual profile deep-dive",
-      "Exclusive events",
+      "Everything in Awakened",
+      "Premium connection features",
+      "Expanded opportunities to connect",
+      "Complete membership experience",
     ],
-    cta: "Go Premium",
+    cta: "Go Enlightened",
     popular: false,
     gradient: "from-amber-500 to-orange-600",
     badge: null,
@@ -84,8 +84,10 @@ export default function PricingPreviewSection() {
             Choose Your Path
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Find the plan that aligns with your spiritual journey. Upgrade or
-            cancel anytime.
+            Find a membership that fits your journey toward meaningful connection.
+          </p>
+          <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed mt-3">
+            Whether you are just beginning to explore conscious dating or are ready to invest more time in meeting potential partners, choose the experience that works for you.
           </p>
         </motion.div>
 
@@ -192,6 +194,9 @@ export default function PricingPreviewSection() {
           >
             View all plans & detailed comparison →
           </LoadingLink>
+          <p className="text-xs text-gray-400 mt-4 max-w-md mx-auto">
+            Choose the path that feels right for you and continue your journey at your own pace.
+          </p>
         </motion.div>
       </div>
     </section>

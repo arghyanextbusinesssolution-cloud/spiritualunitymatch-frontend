@@ -8,7 +8,7 @@ const steps = [
     icon: "📝",
     title: "Create Your Profile",
     description:
-      "Share your spiritual beliefs, practices, and what you're looking for in a relationship. Your authentic self is your strongest asset.",
+      "Tell your story and share the interests, values, beliefs, and qualities that make you who you are.",
     color: "from-red-500 to-rose-600",
   },
   {
@@ -16,7 +16,7 @@ const steps = [
     icon: "🔍",
     title: "Discover Matches",
     description:
-      "Our intelligent algorithm connects you with people who share your spiritual path, values, and relationship intentions.",
+      "Explore profiles and discover people who may share your values, interests, lifestyle, and relationship intentions.",
     color: "from-pink-500 to-rose-600",
   },
   {
@@ -24,7 +24,7 @@ const steps = [
     icon: "💬",
     title: "Connect & Message",
     description:
-      "When you both like each other, begin meaningful conversations. Our prompt library helps you dive deeper than small talk.",
+      "Start a genuine conversation and take the time to learn about each other's experiences, perspectives, and goals.",
     color: "from-orange-500 to-red-600",
   },
   {
@@ -32,7 +32,7 @@ const steps = [
     icon: "💑",
     title: "Build a Relationship",
     description:
-      "Nurture conscious relationships rooted in alignment, depth, and mutual spiritual growth — one genuine moment at a time.",
+      "When you discover a genuine connection, allow it to develop naturally into something deeper and more meaningful.",
     color: "from-emerald-500 to-teal-600",
   },
 ];
@@ -62,8 +62,10 @@ export default function HowItWorksSection() {
             Your Journey in 4 Steps
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            From first profile to lasting connection — here's how conscious
-            relationships begin.
+            Take your time. Be authentic. Connect with intention.
+          </p>
+          <p className="text-base text-gray-500 max-w-2xl mx-auto leading-relaxed mt-3">
+            Finding a meaningful relationship does not have to feel complicated. Our simple process helps you move from creating your profile to discovering meaningful connections.
           </p>
         </motion.div>
 

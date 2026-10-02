@@ -39,6 +39,14 @@ const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <SectionSkeleton height="h-64" />,
   ssr: false,
 });
+const NewYorkMatchmakingSection = dynamic(
+  () => import("@/components/home/NewYorkMatchmakingSection"),
+  { loading: () => <SectionSkeleton />, ssr: false }
+);
+const FinalNYSEOSection = dynamic(
+  () => import("@/components/home/FinalNYSEOSection"),
+  { loading: () => <SectionSkeleton />, ssr: false }
+);
 const SiteFooter = dynamic(() => import("@/components/home/SiteFooter"), {
   ssr: false,
 });
@@ -115,7 +123,9 @@ export default function HomePage() {
         <HowItWorksSection />
         <PricingPreviewSection />
         <TestimonialsSection />
+        <NewYorkMatchmakingSection />
         <MembersOnlineSection />
+        <FinalNYSEOSection />
         <CTASection />
       </main>
 
