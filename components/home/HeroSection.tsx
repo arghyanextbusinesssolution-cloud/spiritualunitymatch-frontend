@@ -12,7 +12,7 @@ export default function HeroSection() {
   const { startLoading } = useLoading();
 
   return (
-    <section className="relative overflow-hidden min-h-screen flex items-center pt-20">
+    <section className="relative overflow-hidden min-h-screen flex items-center pt-36 lg:pt-40 pb-20">
       {/* Ambient background orbs */}
       <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden>
         <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-brand-gradient opacity-10 blur-3xl" />
@@ -38,22 +38,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            {/* Logo */}
-            <motion.div
-              className="mb-8 flex justify-center lg:justify-start"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7 }}
-            >
-              <Image
-                src={LOGO}
-                alt="Spiritual Unity Match Logo"
-                width={180}
-                height={180}
-                priority
-                className="w-36 h-36 sm:w-44 sm:h-44 lg:w-52 lg:h-52 object-contain drop-shadow-xl"
-              />
-            </motion.div>
+     
 
             {/* Headline */}
             <h1

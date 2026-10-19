@@ -14,6 +14,7 @@ export default function DefaultNavbar() {
         { name: 'About Us', link: '/about' },
         { name: 'Features', link: '/features' },
         { name: 'Pricing', link: '/pricing' },
+        { name: 'Blog', link: '/blog' },
     ];
 
     return (

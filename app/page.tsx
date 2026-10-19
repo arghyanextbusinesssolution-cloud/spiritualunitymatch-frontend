@@ -47,6 +47,10 @@ const FinalNYSEOSection = dynamic(
   () => import("@/components/home/FinalNYSEOSection"),
   { loading: () => <SectionSkeleton />, ssr: false }
 );
+const BlogsSection = dynamic(
+  () => import("@/components/home/BlogsSection"),
+  { loading: () => <SectionSkeleton />, ssr: false }
+);
 const SiteFooter = dynamic(() => import("@/components/home/SiteFooter"), {
   ssr: false,
 });
@@ -125,6 +129,7 @@ export default function HomePage() {
         <TestimonialsSection />
         <NewYorkMatchmakingSection />
         <MembersOnlineSection />
+        <BlogsSection />
         <FinalNYSEOSection />
         <CTASection />
       </main>

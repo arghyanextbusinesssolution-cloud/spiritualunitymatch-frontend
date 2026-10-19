@@ -17,6 +17,7 @@ import {
     MessageSquare,
     Wrench,
     Calendar,
+    FileText,
 } from 'lucide-react';
 
 const navItems = [
@@ -25,6 +26,7 @@ const navItems = [
     { href: '/admin/subscriptions', label: 'Subscriptions', icon: CreditCard },
     { href: '/admin/matches', label: 'Matches', icon: Heart },
     { href: '/admin/events', label: 'Events', icon: Calendar },
+    { href: '/admin/blogs', label: 'Blog Posts', icon: FileText },
     { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
     { href: '/admin/settings', label: 'Settings', icon: Settings },
     { href: '/admin/system-messages', label: 'System Messages', icon: MessageSquare },
