@@ -59,7 +59,19 @@ export const metadata: Metadata = {
   authors: [{ name: "Spiritual Unity Match" }],
   creator: "Next Business Solution",
   publisher: "Spiritual Unity Match",
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
