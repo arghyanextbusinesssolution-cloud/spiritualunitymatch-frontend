@@ -16,7 +16,7 @@ export default function ConversationPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/auth/login');
+      router.replace('/auth/login');
     } else if (user) {
       fetchUserProfile();
     }

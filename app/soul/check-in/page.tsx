@@ -41,7 +41,7 @@ export default function CheckInPage() {
   };
 
   useEffect(() => {
-    if (!authLoading && !user) { router.push('/auth/login'); return; }
+    if (!authLoading && !user) { router.replace('/auth/login'); return; }
     if (user) fetchAll();
   }, [user, authLoading, router]);
 

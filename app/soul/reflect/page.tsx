@@ -26,7 +26,7 @@ export default function ReflectPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) { router.push('/auth/login'); return; }
+    if (!authLoading && !user) { router.replace('/auth/login'); return; }
     if (user) {
       fetchProfile();
       // Pick a random prompt each visit

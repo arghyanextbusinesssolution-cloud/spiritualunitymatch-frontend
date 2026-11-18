@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         try {
             await api.post('/auth/logout');
         } catch { }
-        router.push('/auth/login');
+        router.replace('/auth/login');
     };
 
     if (authLoading) {

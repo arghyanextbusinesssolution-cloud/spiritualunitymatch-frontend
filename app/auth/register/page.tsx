@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLoading } from '@/contexts/LoadingContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import AuthBackButton from '@/components/AuthBackButton';
 import Image from 'next/image';
 import ComingSoonModal from '@/components/ComingSoonModal';
 
@@ -41,7 +42,7 @@ export default function RegisterPage() {
     try {
       await register(email, password);
       startLoading();
-      router.push('/profile/setup');
+      router.replace('/profile/setup');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {
@@ -60,6 +61,7 @@ export default function RegisterPage() {
       backgroundRepeat: 'no-repeat' 
     }}>
       <main className="relative pt-20 pb-10 px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center min-h-screen overflow-hidden">
+        <AuthBackButton />
         {/* Registration Card Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

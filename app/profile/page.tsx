@@ -21,7 +21,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/auth/login');
+      router.replace('/auth/login');
       return;
     }
 

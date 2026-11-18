@@ -42,7 +42,7 @@ export default function EditProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/auth/login');
+      router.replace('/auth/login');
       return;
     }
 

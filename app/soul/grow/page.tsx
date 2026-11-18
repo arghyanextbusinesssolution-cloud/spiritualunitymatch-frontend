@@ -58,7 +58,7 @@ export default function GrowPage() {
   const [completedRituals, setCompletedRituals] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!authLoading && !user) { router.push('/auth/login'); return; }
+    if (!authLoading && !user) { router.replace('/auth/login'); return; }
     if (user) {
       fetchProfile();
       fetchReadiness();

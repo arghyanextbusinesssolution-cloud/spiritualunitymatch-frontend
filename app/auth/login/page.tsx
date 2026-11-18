@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLoading } from '@/contexts/LoadingContext';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import AuthBackButton from '@/components/AuthBackButton';
 import Image from 'next/image';
 import ComingSoonModal from '@/components/ComingSoonModal';
 
@@ -28,10 +29,13 @@ export default function LoginPage() {
     try {
       const loggedInUser = await login(email, password);
       startLoading();
+      // replace() so the Back button doesn't return to the login form
       if (loggedInUser?.role === 'admin') {
-        router.push('/admin/dashboard');
+        router.replace('/admin/dashboard');
+      } else if (loggedInUser?.role === 'seo') {
+        router.replace('/seo');
       } else {
-        router.push('/matches/suggested');
+        router.replace('/matches/suggested');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
@@ -51,6 +55,7 @@ export default function LoginPage() {
       backgroundRepeat: 'no-repeat' 
     }}>
       <main className="relative pt-20 pb-10 px-margin-mobile md:px-margin-desktop flex flex-col items-center justify-center min-h-screen overflow-hidden">
+        <AuthBackButton />
         {/* Login Card Container */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
