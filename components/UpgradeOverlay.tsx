@@ -13,11 +13,12 @@ const plans = [
         price: '$19',
         description: 'Awaken your journey with essential divine features.',
         features: [
-            'Unlimited profile browsing',
-            'Full messaging capabilities',
-            'Reveal who liked your soul',
-            'Advanced match filters',
-            'Daily profile boost',
+            'Unlimited profile browsing & swipes',
+            'Full unlimited messaging',
+            'See who liked your profile',
+            'Advanced spiritual tag search',
+            'Improved profile visibility in feed',
+            'Access to conscious event listings',
         ],
         popular: true,
         icon: '✨',
@@ -32,12 +33,12 @@ const plans = [
         price: '$39',
         description: 'The ultimate path to spiritual alignment.',
         features: [
-            'Priority search placement',
-            'Divine compatibility reports',
-            'See detailed profile visits',
-            'Ghost mode browsing',
-            'Exclusive event access',
-            'Infinite soul reach',
+            'Everything in Standard',
+            'Priority search placement across all feeds',
+            'Comprehensive Soul Compatibility Reports',
+            'Unlimited rewinds & super likes',
+            'Personalized matchmaking recommendations',
+            'VIP customer & spiritual support 24/7',
         ],
         icon: '👑',
         gradient: 'from-[#f59e0b] via-[#d97706] to-[#b45309]',
@@ -62,7 +63,8 @@ export default function UpgradeOverlay() {
 
             if (response.data.success) {
                 if (response.data.redirectUrl) {
-                    router.push(response.data.redirectUrl);
+                    // Stripe Checkout is an external URL -> full page navigation
+                    window.location.href = response.data.redirectUrl;
                 } else {
                     router.push('/subscription/success');
                 }

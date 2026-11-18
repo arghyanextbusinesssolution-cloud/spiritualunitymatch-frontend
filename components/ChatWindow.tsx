@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSocket } from '@/contexts/SocketContext';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 
 interface ChatWindowProps {
     otherUserId: string;
@@ -14,6 +15,7 @@ interface ChatWindowProps {
 
 export default function ChatWindow({ otherUserId, onClose, isEmbedded = false }: ChatWindowProps) {
     const { user } = useAuth();
+    const { showUpgradeModal } = useSubscription();
     const { socket, connected, joinConversation, leaveConversation, sendTypingIndicator, markMessageAsRead } = useSocket();
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
@@ -73,6 +75,9 @@ export default function ChatWindow({ otherUserId, onClose, isEmbedded = false }:
             if (error.response?.status === 403) {
                 if (error.response?.data?.requiresMatch) {
                     setError('Mutual match required to chat.');
+                } else if (error.response?.data?.requiresUpgrade) {
+                    setError('Messaging is available on Standard and Premium plans.');
+                    showUpgradeModal();
                 }
             }
         } finally {
@@ -157,7 +162,12 @@ export default function ChatWindow({ otherUserId, onClose, isEmbedded = false }:
                 }
             }
         } catch (error: any) {
-            alert(error.response?.data?.message || 'Error sending message');
+            if (error.response?.data?.requiresUpgrade) {
+                setNewMessage(content); // keep what they typed
+                showUpgradeModal();
+            } else {
+                alert(error.response?.data?.message || 'Error sending message');
+            }
         } finally {
             setSending(false);
         }

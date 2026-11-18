@@ -112,10 +112,7 @@ export default function SuggestedMatchesPage() {
       }
     } catch (error: any) {
       if (error.response?.status === 403) {
-        showToast('Access restricted. Redirecting to upgrade...', 'error');
-        setTimeout(() => {
-          router.push('/plans');
-        }, 1500);
+        showUpgradeModal();
       }
     } finally {
       setLoading(false);
@@ -185,10 +182,9 @@ export default function SuggestedMatchesPage() {
       }
     } catch (error: any) {
       if (error.response?.data?.requiresUpgrade) {
-        showToast(error.response.data.message || 'Daily limit reached. Redirecting to upgrade...', 'error');
-        setTimeout(() => {
-          router.push('/plans');
-        }, 1500);
+        // Free plan: daily swipe limit reached -> show upgrade popup
+        showToast(error.response.data.message || 'Daily swipe limit reached.', 'error');
+        showUpgradeModal();
       } else {
         showToast(error.response?.data?.message || 'Error liking user', 'error');
       }
@@ -211,10 +207,9 @@ export default function SuggestedMatchesPage() {
     } catch (error: any) {
       console.error('Reject error:', error);
       if (error.response?.data?.requiresUpgrade) {
-        showToast(error.response.data.message || 'Daily limit reached. Redirecting to upgrade...', 'error');
-        setTimeout(() => {
-          router.push('/plans');
-        }, 1500);
+        // Free plan: daily swipe limit reached -> show upgrade popup
+        showToast(error.response.data.message || 'Daily swipe limit reached.', 'error');
+        showUpgradeModal();
       } else {
         showToast(error.response?.data?.message || 'Error rejecting user', 'error');
       }

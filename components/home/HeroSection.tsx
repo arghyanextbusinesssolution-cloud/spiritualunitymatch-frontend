@@ -148,9 +148,9 @@ export default function HeroSection() {
 
 /* ─── Hero Image Slider (local, no extra chunk) ──────────────────────────── */
 const SLIDES = [
-  "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788211/photo1_xx7mbe.webp",
-  "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788211/photo2_bmtjyv.webp",
-  "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/photo3_wxhucm.webp",
+  "/photo1.webp",
+  "/photo2.webp",
+  "/photo3.webp",
 ];
 
 function HeroImageSlider() {

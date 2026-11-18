@@ -81,7 +81,7 @@ export const metadata: Metadata = {
     siteName: "Spiritual Unity Match",
     images: [
       {
-        url: "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp",
+        url: "/logo.webp",
         width: 1200,
         height: 630,
         alt: "Spiritual Unity Match",
@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     description:
       "Join a spiritual dating site in New York for conscious singles seeking meaningful relationships and soulmate matchmaking.",
     images: [
-      "https://res.cloudinary.com/dxx54fccl/image/upload/v1776788210/logo_svnirs.webp",
+      "/logo.webp",
     ],
   },
   icons: {
