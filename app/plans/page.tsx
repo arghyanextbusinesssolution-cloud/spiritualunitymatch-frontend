@@ -24,12 +24,13 @@ const plans: Plan[] = [
     name: 'Basic',
     plan: 'basic',
     price: '$0',
-    description: 'Start your spiritual journey',
+    description: 'Begin your journey',
     features: [
-      'Create profile',
-      'View own profile',
-      '10 profile views/day',
-      'Limited likes',
+      'Create a detailed spiritual profile',
+      'View up to 10 profiles per day',
+      'Send limited initial likes',
+      'Access basic filter options',
+      'Participate in open community polls',
     ],
     icon: <Leaf className="w-10 h-10 text-primary" />,
   },
@@ -39,10 +40,12 @@ const plans: Plan[] = [
     price: '$19',
     description: 'Our most popular choice',
     features: [
-      'Unlimited profile browsing',
-      'Full messaging access',
-      'See who liked you',
-      'Improved profile visibility',
+      'Unlimited profile browsing & swipes',
+      'Full unlimited messaging',
+      'See who liked your profile',
+      'Advanced spiritual tag search',
+      'Improved profile visibility in feed',
+      'Access to conscious event listings',
     ],
     popular: true,
     icon: <Star className="w-10 h-10 text-primary fill-primary" />,
@@ -53,10 +56,12 @@ const plans: Plan[] = [
     price: '$39',
     description: 'Divine connection experience',
     features: [
-      'Priority search placement',
-      'Advanced spiritual filters',
-      'Soul compatibility reports',
-      'Personal matchmaking',
+      'Everything in Standard',
+      'Priority search placement across all feeds',
+      'Comprehensive Soul Compatibility Reports',
+      'Unlimited rewinds & super likes',
+      'Personalized matchmaking recommendations',
+      'VIP customer & spiritual support 24/7',
     ],
     icon: <Sparkles className="w-10 h-10 text-primary" />,
   },
@@ -77,6 +82,12 @@ export default function PlansPage() {
   const handleSelectPlan = async (plan: 'basic' | 'standard' | 'premium') => {
     if (!user) {
       router.push('/auth/login');
+      return;
+    }
+
+    // Basic is free - no payment, just continue into the app
+    if (plan === 'basic') {
+      router.push('/matches/suggested');
       return;
     }
 
@@ -124,8 +135,8 @@ export default function PlansPage() {
   // Filter plans based on the user's current subscription level
   const visiblePlans = plans.filter((plan) => {
     if (isFreePlan) {
-      // Free users see Standard and Premium
-      return plan.plan === 'standard' || plan.plan === 'premium';
+      // Free users see Basic (free) + Standard + Premium
+      return true;
     } else if (isStandardPlan) {
       // Standard users upgrade to Premium only
       return plan.plan === 'premium';
@@ -277,8 +288,8 @@ export default function PlansPage() {
                 </p>
               </div>
 
-              {/* Dynamic Grid showing Standard & Premium side-by-side */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
+              {/* Dynamic Grid showing Basic (free), Standard & Premium side-by-side */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
                 {visiblePlans.map((plan, index) => (
                   <motion.div
                     key={plan.plan}
@@ -309,7 +320,7 @@ export default function PlansPage() {
                     
                     <div className="mb-8 flex items-baseline justify-center gap-1">
                       <span className="text-5xl font-extrabold text-on-surface">{plan.price}</span>
-                      <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">/ MONTH</span>
+                      <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">{plan.plan === 'basic' ? 'FOREVER' : '/ MONTH'}</span>
                     </div>
 
                     <ul className="w-full space-y-4 mb-10 text-left flex-1">
@@ -327,10 +338,12 @@ export default function PlansPage() {
                       className={`w-full py-4 rounded-full text-xs font-bold uppercase tracking-widest transition-all disabled:opacity-50 ${
                         plan.plan === 'premium'
                           ? 'bg-gradient-to-r from-primary to-primary-container text-white shadow-md hover:scale-[1.02]'
-                          : 'border-2 border-primary text-primary hover:bg-primary/5'
+                          : plan.plan === 'basic'
+                            ? 'border-2 border-outline-variant text-on-surface-variant hover:bg-surface-container-low'
+                            : 'border-2 border-primary text-primary hover:bg-primary/5'
                       }`}
                     >
-                      {loading ? 'Processing...' : 'SELECT PLAN'}
+                      {loading && plan.plan !== 'basic' ? 'Processing...' : plan.plan === 'basic' ? 'CONTINUE FOR FREE' : 'SELECT PLAN'}
                     </button>
                   </motion.div>
                 ))}
